@@ -7,9 +7,9 @@ import { getProjects, getFilterOptions } from "@/lib/notion";
 export const revalidate = 3600; // ISR: 1시간마다 재검증
 
 export const metadata: Metadata = {
-  title: "프로젝트 실적",
+  title: "수행실적",
   description:
-    "(주)동양구조의 프로젝트 실적입니다. 공동주택, 업무시설, 교육연구시설 등 다양한 분야의 구조설계 실적을 확인하세요.",
+    "(주)동양구조의 수행실적입니다. 공동주택, 업무시설, 교육연구시설 등 다양한 분야의 구조설계 실적을 확인하세요.",
 };
 
 interface ProjectsPageProps {
@@ -35,7 +35,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   return (
     <>
       <PageHero
-        title="프로젝트 실적"
+        title="수행실적"
         subtitle="다양한 분야의 구조설계 및 안전진단 실적"
       />
 

@@ -54,7 +54,7 @@ export function Footer() {
                 사업분야
               </Link>
               <Link href="/projects" className="hover:text-brand-light transition-colors">
-                프로젝트 실적
+                수행실적
               </Link>
               <Link href="/contact" className="hover:text-brand-light transition-colors">
                 문의하기
