@@ -7,7 +7,7 @@ const contactSchema = z.object({
   name: z.string().check(z.minLength(1, "이름을 입력해주세요")),
   email: z.email("올바른 이메일 주소를 입력해주세요"),
   phone: z.string().optional(),
-  message: z.string().check(z.minLength(10, "문의내용을 10자 이상 입력해주세요")),
+  message: z.string().check(z.minLength(1, "문의내용을 입력해주세요")),
 });
 
 const transporter = nodemailer.createTransport({
@@ -73,7 +73,7 @@ export async function submitContact(formData: FormData) {
     console.error("이메일 전송 실패:", error);
     return {
       success: false as const,
-      errors: { message: ["문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요."] },
+      errors: { message: ["문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요. 또는 전화(02-549-4566), 이메일(dyce@dyce.kr)로 직접 문의해주세요."] },
     };
   }
 }

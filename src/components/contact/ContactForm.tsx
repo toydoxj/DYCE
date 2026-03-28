@@ -14,19 +14,24 @@ const contactSchema = z.object({
   name: z.string().check(z.minLength(1, "이름을 입력해주세요")),
   email: z.email("올바른 이메일 주소를 입력해주세요"),
   phone: z.string().optional(),
-  message: z.string().check(z.minLength(10, "문의내용을 10자 이상 입력해주세요")),
+  message: z.string().check(z.minLength(1, "문의내용을 입력해주세요")),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState("");
   const [, formAction, isPending] = useActionState(
     async (_prev: unknown, formData: FormData) => {
+      setServerError("");
       const result = await submitContact(formData);
       if (result.success) {
         setSubmitted(true);
         reset();
+      } else if (result.errors) {
+        const firstError = Object.values(result.errors).flat()[0];
+        if (firstError) setServerError(firstError);
       }
       return result;
     },
@@ -39,6 +44,7 @@ export function ContactForm() {
     reset,
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
+    mode: "onBlur",
   });
 
   if (submitted) {
@@ -81,7 +87,10 @@ export function ContactForm() {
   return (
     <Card>
       <CardContent className="p-6">
-        <form action={formAction} className="space-y-5">
+        <form
+          action={formAction}
+          className="space-y-5"
+        >
           <div>
             <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
               이름 <span className="text-red-500">*</span>
@@ -119,7 +128,7 @@ export function ContactForm() {
               id="phone"
               type="tel"
               {...register("phone")}
-              placeholder="010-0000-0000"
+              placeholder="010-0000-0000 (선택)"
             />
           </div>
 
@@ -130,7 +139,7 @@ export function ContactForm() {
             <Textarea
               id="message"
               {...register("message")}
-              placeholder="문의하실 내용을 입력해주세요 (최소 10자)"
+              placeholder="문의하실 내용을 입력해주세요"
               rows={6}
             />
             {errors.message && (
@@ -139,6 +148,10 @@ export function ContactForm() {
               </p>
             )}
           </div>
+
+          {serverError && (
+            <p className="text-sm text-red-500">{serverError}</p>
+          )}
 
           <Button
             type="submit"
