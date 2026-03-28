@@ -38,6 +38,7 @@ export interface TeamMember {
   education: string[];
   career: string[];
   certifications: string[];
+  activities?: string[];
   awards: string[];
   publications?: string[];
 }

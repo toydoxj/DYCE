@@ -7,7 +7,7 @@ export function HeroSection() {
     <section className="relative flex min-h-[80vh] items-center bg-navy">
       {/* 배경 이미지 */}
       <Image
-        src="/image.png"
+        src="/hero-main.png"
         alt="동양구조 프로젝트"
         fill
         className="object-cover"
@@ -36,14 +36,14 @@ export function HeroSection() {
           <div className="mt-10 flex flex-wrap gap-4">
             <Link
               href="/business"
-              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-brand px-4 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
+              className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-brand px-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
             >
               사업분야 보기
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/contact"
-              className="inline-flex h-9 items-center justify-center rounded-lg border border-white/30 px-4 text-sm font-medium text-white transition-colors hover:bg-white/10"
+              className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-white/30 px-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
             >
               문의하기
             </Link>

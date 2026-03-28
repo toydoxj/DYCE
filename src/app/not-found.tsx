@@ -9,7 +9,7 @@ export default function NotFound() {
       </p>
       <Link
         href="/"
-        className="mt-8 inline-flex h-9 items-center justify-center rounded-lg bg-navy px-4 text-sm font-medium text-white transition-colors hover:bg-navy-dark"
+        className="mt-8 inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-navy px-2.5 text-sm font-medium text-white transition-colors hover:bg-navy-dark"
       >
         홈으로 돌아가기
       </Link>

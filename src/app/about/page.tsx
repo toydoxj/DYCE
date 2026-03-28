@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { PageHero } from "@/components/layout";
 import { ProfileCard } from "@/components/about";
 import { teamMembers } from "@/data/team";
+import { Card, CardContent } from "@/components/ui/card";
+import { Quote } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "회사소개",
@@ -19,41 +22,69 @@ export default function AboutPage() {
 
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* 인사말 */}
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-bold text-navy">인사말</h2>
-            <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-              안녕하십니까, (주)동양구조 대표이사 김효진입니다.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              (주)동양구조는 1993년 창립 이래 30여 년간 건축구조설계
-              전문기업으로서 안전하고 합리적인 구조설계를 통해 대한민국 건축물의
-              구조적 안전성 확보에 기여해 왔습니다. 그동안 축적된 기술력과 경험을
-              바탕으로 신축 건축물 구조설계는 물론, 리모델링 구조설계, 안전진단,
-              구조감리 협력, 법원감정 등 건축구조 전 분야에 걸쳐 전문 서비스를
-              제공하고 있습니다.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              저희는 단순히 구조계산을 수행하는 것이 아니라, 건축물의 용도와
-              특성을 깊이 이해하고 최적의 구조시스템을 제안하는 것을 목표로
-              합니다. 건축구조기술사를 포함한 우수한 전문 인력이 최신 해석 기술과
-              풍부한 현장 경험을 결합하여, 안전성과 경제성을 동시에 만족시키는
-              설계를 실현하고 있습니다.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-              앞으로도 끊임없는 기술 혁신과 인재 육성을 통해 고객 여러분께 더
-              높은 수준의 기술 서비스를 제공하고, 대한민국 건축구조 분야의 발전에
-              이바지하는 기업이 되겠습니다. 변함없는 관심과 성원을 부탁드립니다.
-            </p>
-            <p className="mt-6 text-sm font-semibold text-navy">
-              (주)동양구조 대표이사 김효진
-            </p>
+          {/* 인사말 카드 */}
+          <div className="mx-auto max-w-3xl">
+            <h2 className="mb-8 text-center text-2xl font-bold text-navy">
+              인사말
+            </h2>
+            <Card className="overflow-hidden">
+              <CardContent className="relative p-8 sm:p-10">
+                <Quote className="absolute top-6 left-6 h-10 w-10 text-brand/15" />
+
+                <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
+                  <p>안녕하십니까, (주)동양구조 대표이사 김효진입니다.</p>
+                  <p>
+                    (주)동양구조는 1993년 창립 이래 30여 년간 건축구조설계
+                    전문기업으로서 안전하고 합리적인 구조설계를 통해 대한민국
+                    건축물의 구조적 안전성 확보에 기여해 왔습니다. 그동안 축적된
+                    기술력과 경험을 바탕으로 신축 건축물 구조설계는 물론, 리모델링
+                    구조설계, 안전진단, 구조감리 협력, 법원감정 등 건축구조 전
+                    분야에 걸쳐 전문 서비스를 제공하고 있습니다.
+                  </p>
+                  <p>
+                    저희는 단순히 구조계산을 수행하는 것이 아니라, 건축물의 용도와
+                    특성을 깊이 이해하고 최적의 구조시스템을 제안하는 것을 목표로
+                    합니다. 건축구조기술사를 포함한 우수한 전문 인력이 최신 해석
+                    기술과 풍부한 현장 경험을 결합하여, 안전성과 경제성을 동시에
+                    만족시키는 설계를 실현하고 있습니다.
+                  </p>
+                  <p>
+                    앞으로도 끊임없는 기술 혁신과 인재 육성을 통해 고객 여러분께
+                    더 높은 수준의 기술 서비스를 제공하고, 대한민국 건축구조 분야의
+                    발전에 이바지하는 기업이 되겠습니다. 변함없는 관심과 성원을
+                    부탁드립니다.
+                  </p>
+                </div>
+
+                <div className="mt-8 border-t pt-6">
+                  <p className="text-right text-sm font-semibold text-navy">
+                    (주)동양구조 대표이사 김효진
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
-          {/* 대표이사 */}
-          <div className="mt-16">
+          {/* 조직구성 */}
+          <div className="mt-20">
             <h2 className="mb-8 text-center text-2xl font-bold text-navy">
-              대표이사
+              조직구성
+            </h2>
+            <div className="mx-auto max-w-4xl overflow-hidden rounded-xl border shadow-sm">
+              <Image
+                src="/Gemini_Generated_Image_mbegxembegxembeg.png"
+                alt="동양구조 조직도"
+                width={1200}
+                height={675}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          {/* 대표이사 소개 */}
+          <div className="mt-20">
+            <h2 className="mb-8 text-center text-2xl font-bold text-navy">
+              대표이사 소개
             </h2>
             <div className="space-y-8">
               {teamMembers
@@ -64,11 +95,11 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* 임원 */}
+          {/* 임원 소개 */}
           {teamMembers.some((m) => m.position !== "대표이사") && (
-            <div className="mt-16">
+            <div className="mt-20">
               <h2 className="mb-8 text-center text-2xl font-bold text-navy">
-                임원
+                임원 소개
               </h2>
               <div className="space-y-8">
                 {teamMembers

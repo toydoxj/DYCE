@@ -10,11 +10,31 @@ export default function ProjectsLoading() {
 
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-navy/20 border-t-brand" />
-            <p className="mt-4 text-sm text-muted-foreground">
-              수행실적을 불러오는 중입니다...
-            </p>
+          {/* 필터 스켈레톤 */}
+          <div className="flex flex-wrap gap-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-9 w-28 animate-pulse rounded-lg bg-muted"
+              />
+            ))}
+          </div>
+
+          {/* 카드 그리드 스켈레톤 */}
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="overflow-hidden rounded-xl border">
+                <div className="h-48 animate-pulse bg-muted" />
+                <div className="space-y-3 p-4">
+                  <div className="h-5 w-3/4 animate-pulse rounded bg-muted" />
+                  <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
+                  <div className="flex gap-2">
+                    <div className="h-5 w-16 animate-pulse rounded-full bg-muted" />
+                    <div className="h-5 w-16 animate-pulse rounded-full bg-muted" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

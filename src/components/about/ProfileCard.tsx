@@ -1,7 +1,17 @@
+"use client";
+
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { TeamMember } from "@/types";
-import { GraduationCap, Briefcase, Award, BookOpen, BadgeCheck } from "lucide-react";
+import {
+  GraduationCap,
+  Briefcase,
+  Award,
+  BookOpen,
+  BadgeCheck,
+  Users,
+} from "lucide-react";
 
 interface ProfileCardProps {
   member: TeamMember;
@@ -16,13 +26,13 @@ interface ProfileSectionProps {
 function ProfileSection({ icon: Icon, title, items }: ProfileSectionProps) {
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mb-3">
         <Icon className="h-4 w-4 text-brand" />
         <h4 className="text-sm font-semibold text-navy">{title}</h4>
       </div>
-      <ul className="mt-2 space-y-1 pl-6">
+      <ul className="space-y-1.5 pl-6">
         {items.map((item) => (
-          <li key={item} className="text-sm text-muted-foreground list-disc">
+          <li key={item} className="list-disc text-sm leading-relaxed text-muted-foreground">
             {item}
           </li>
         ))}
@@ -32,54 +42,119 @@ function ProfileSection({ icon: Icon, title, items }: ProfileSectionProps) {
 }
 
 export function ProfileCard({ member }: ProfileCardProps) {
+  const hasActivities = member.activities && member.activities.length > 0;
+  const hasPublications = member.publications && member.publications.length > 0;
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
         <div className="flex flex-col md:flex-row">
-          {/* 좌측: 기본 정보 */}
-          <div className="flex flex-col items-center justify-center bg-navy p-8 text-white md:w-64">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/10 text-3xl font-bold text-brand">
-              {member.name[0]}
-            </div>
+          {/* 좌측: 기본 정보 + 사진 */}
+          <div className="flex flex-col items-center justify-center bg-navy p-8 text-white md:w-72">
+            {member.image ? (
+              <div className="relative h-32 w-32 overflow-hidden rounded-full border-2 border-white/20">
+                <Image
+                  src={member.image}
+                  alt={`${member.name} 프로필`}
+                  fill
+                  className="object-cover object-top"
+                />
+              </div>
+            ) : (
+              <div className="flex h-32 w-32 items-center justify-center rounded-full bg-white/10 text-3xl font-bold text-brand">
+                {member.name[0]}
+              </div>
+            )}
             <h3 className="mt-4 text-xl font-bold">{member.name}</h3>
             <p className="text-sm text-white/60">{member.position}</p>
+
+            {/* 학력 · 자격 요약 */}
+            <div className="mt-6 w-full space-y-4 border-t border-white/10 pt-6">
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-white/40">학력</p>
+                <ul className="space-y-1">
+                  {member.education.map((item) => (
+                    <li key={item} className="text-xs leading-relaxed text-white/70">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="mb-1.5 text-xs font-medium text-white/40">자격</p>
+                <ul className="space-y-1">
+                  {member.certifications.map((item) => (
+                    <li key={item} className="text-xs leading-relaxed text-white/70">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
 
-          {/* 우측: 상세 이력 */}
-          <div className="flex-1 space-y-5 p-6 sm:p-8">
-            <ProfileSection
-              icon={GraduationCap}
-              title="학력"
-              items={member.education}
-            />
-            <Separator />
-            <ProfileSection
-              icon={Briefcase}
-              title="경력"
-              items={member.career}
-            />
-            <Separator />
-            <ProfileSection
-              icon={BadgeCheck}
-              title="자격/면허"
-              items={member.certifications}
-            />
-            <Separator />
-            <ProfileSection
-              icon={Award}
-              title="상훈"
-              items={member.awards}
-            />
-            {member.publications && member.publications.length > 0 && (
-              <>
-                <Separator />
+          {/* 우측: 탭 기반 상세 이력 */}
+          <div className="flex-1 p-6 sm:p-8">
+            <Tabs defaultValue="career">
+              <TabsList variant="line" className="mb-6 w-full flex-wrap gap-0">
+                <TabsTrigger value="career" className="gap-1 text-xs sm:text-sm">
+                  <Briefcase className="h-3.5 w-3.5" />
+                  경력
+                </TabsTrigger>
+                {hasActivities && (
+                  <TabsTrigger value="activities" className="gap-1 text-xs sm:text-sm">
+                    <Users className="h-3.5 w-3.5" />
+                    주요 활동
+                  </TabsTrigger>
+                )}
+                <TabsTrigger value="awards" className="gap-1 text-xs sm:text-sm">
+                  <Award className="h-3.5 w-3.5" />
+                  상훈
+                </TabsTrigger>
+                {hasPublications && (
+                  <TabsTrigger value="publications" className="gap-1 text-xs sm:text-sm">
+                    <BookOpen className="h-3.5 w-3.5" />
+                    집필/연구
+                  </TabsTrigger>
+                )}
+              </TabsList>
+
+              <TabsContent value="career">
                 <ProfileSection
-                  icon={BookOpen}
-                  title="집필/연구"
-                  items={member.publications}
+                  icon={Briefcase}
+                  title="경력사항"
+                  items={member.career}
                 />
-              </>
-            )}
+              </TabsContent>
+
+              {hasActivities && (
+                <TabsContent value="activities">
+                  <ProfileSection
+                    icon={Users}
+                    title="주요 활동"
+                    items={member.activities!}
+                  />
+                </TabsContent>
+              )}
+
+              <TabsContent value="awards">
+                <ProfileSection
+                  icon={Award}
+                  title="상훈"
+                  items={member.awards}
+                />
+              </TabsContent>
+
+              {hasPublications && (
+                <TabsContent value="publications">
+                  <ProfileSection
+                    icon={BookOpen}
+                    title="집필 및 연구"
+                    items={member.publications!}
+                  />
+                </TabsContent>
+              )}
+            </Tabs>
           </div>
         </div>
       </CardContent>

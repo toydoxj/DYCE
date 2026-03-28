@@ -64,7 +64,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/40">
-          {COMPANY.copyright}
+          © {new Date().getFullYear()} {COMPANY.copyrightName}
         </div>
       </div>
     </footer>
