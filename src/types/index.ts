@@ -21,6 +21,11 @@ export interface BusinessService {
   description: string;
 }
 
+export interface ServiceGroup {
+  label: string;
+  services: BusinessService[];
+}
+
 export interface BusinessArea {
   id: string;
   title: string;
@@ -28,6 +33,7 @@ export interface BusinessArea {
   description: string;
   icon: string;
   services: BusinessService[];
+  serviceGroups?: ServiceGroup[];
 }
 
 // 팀 멤버
