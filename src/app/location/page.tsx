@@ -43,11 +43,11 @@ export default function LocationPage() {
         subtitle="(주)동양구조 찾아오시는 방법을 안내합니다"
       />
 
-      <section className="py-12 sm:py-16">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* 주소 */}
           <div className="flex items-start gap-3">
-            <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+            <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
             <div>
               <h2 className="font-semibold text-navy">주소</h2>
               <p className="mt-1 text-sm text-muted-foreground">

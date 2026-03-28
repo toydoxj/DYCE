@@ -12,7 +12,7 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3">
               <Image
-                src="/logo.png"
+                src="/dongyang_logo.svg"
                 alt="동양구조 로고"
                 width={36}
                 height={36}
@@ -33,11 +33,11 @@ export function Footer() {
             <h4 className="font-semibold text-white">연락처</h4>
             <div className="mt-4 space-y-2 text-sm">
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-gold" />
+                <Phone className="h-4 w-4 text-brand" />
                 <span>{COMPANY.phone}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-gold" />
+                <Mail className="h-4 w-4 text-brand" />
                 <span>{COMPANY.email}</span>
               </div>
             </div>
@@ -47,16 +47,16 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-white">바로가기</h4>
             <nav className="mt-4 flex flex-col gap-2 text-sm">
-              <Link href="/about" className="hover:text-gold transition-colors">
+              <Link href="/about" className="hover:text-brand-light transition-colors">
                 회사소개
               </Link>
-              <Link href="/business" className="hover:text-gold transition-colors">
+              <Link href="/business" className="hover:text-brand-light transition-colors">
                 사업분야
               </Link>
-              <Link href="/projects" className="hover:text-gold transition-colors">
+              <Link href="/projects" className="hover:text-brand-light transition-colors">
                 프로젝트 실적
               </Link>
-              <Link href="/contact" className="hover:text-gold transition-colors">
+              <Link href="/contact" className="hover:text-brand-light transition-colors">
                 문의하기
               </Link>
             </nav>

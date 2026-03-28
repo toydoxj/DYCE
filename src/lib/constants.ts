@@ -1,8 +1,8 @@
 export const COLORS = {
   navy: "#2D3436",
-  gold: "#669900",
+  brand: "#669900",
   darkNavy: "#1E2526",
-  lightGold: "#7AB800",
+  brandLight: "#7AB800",
   gray: {
     50: "#F8F9FA",
     100: "#F1F3F5",
@@ -25,6 +25,6 @@ export const COMPANY = {
   phone: "02-549-4566",
   fax: "02-549-4567",
   email: "dyce@dyce.kr",
-  address: "서울시 송파구 법원로11길 11, A동 7707호 (문정동, 현대지식산업센터)",
+  address: "서울시 송파구 법원로11길 11, A동 707호 (문정동, 현대지식산업센터)",
   copyright: "© 2023 Dongyang Consulting Engineers, Co., Ltd.",
 } as const;

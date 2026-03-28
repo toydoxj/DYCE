@@ -7,7 +7,7 @@ interface BusinessCardProps {
 
 export function BusinessCard({ service }: BusinessCardProps) {
   return (
-    <Card className="border transition-all hover:border-gold/30 hover:shadow-sm">
+    <Card className="border transition-all hover:border-brand/30 hover:shadow-sm">
       <CardContent className="p-5">
         <h3 className="font-semibold text-navy">{service.title}</h3>
         <p className="mt-1.5 text-sm text-muted-foreground">

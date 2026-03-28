@@ -17,7 +17,7 @@ function ProfileSection({ icon: Icon, title, items }: ProfileSectionProps) {
   return (
     <div>
       <div className="flex items-center gap-2">
-        <Icon className="h-4 w-4 text-gold" />
+        <Icon className="h-4 w-4 text-brand" />
         <h4 className="text-sm font-semibold text-navy">{title}</h4>
       </div>
       <ul className="mt-2 space-y-1 pl-6">
@@ -38,7 +38,7 @@ export function ProfileCard({ member }: ProfileCardProps) {
         <div className="flex flex-col md:flex-row">
           {/* 좌측: 기본 정보 */}
           <div className="flex flex-col items-center justify-center bg-navy p-8 text-white md:w-64">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/10 text-3xl font-bold text-gold">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/10 text-3xl font-bold text-brand">
               {member.name[0]}
             </div>
             <h3 className="mt-4 text-xl font-bold">{member.name}</h3>

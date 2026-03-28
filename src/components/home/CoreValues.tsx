@@ -1,5 +1,6 @@
 import { Lightbulb, Handshake, Cpu } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { FadeIn } from "@/components/ui/FadeIn";
 
 const values = [
   {
@@ -26,33 +27,34 @@ export function CoreValues() {
   return (
     <section className="py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-navy sm:text-3xl">
-            핵심 가치
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            동양구조가 추구하는 가치입니다
-          </p>
-        </div>
+        <FadeIn>
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-navy sm:text-3xl">
+              핵심 가치
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              동양구조가 추구하는 가치입니다
+            </p>
+          </div>
+        </FadeIn>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {values.map((value) => (
-            <Card
-              key={value.title}
-              className="border-none bg-muted/50 transition-shadow hover:shadow-md"
-            >
-              <CardContent className="p-6">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-navy/10">
-                  <value.icon className="h-6 w-6 text-navy" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-navy">
-                  {value.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {value.description}
-                </p>
-              </CardContent>
-            </Card>
+          {values.map((value, i) => (
+            <FadeIn key={value.title} delay={(i + 1) as 1 | 2 | 3}>
+              <Card className="h-full border-none bg-muted/50 transition-all hover:shadow-md hover:-translate-y-1">
+                <CardContent className="p-6">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-navy/10">
+                    <value.icon className="h-6 w-6 text-navy" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-navy">
+                    {value.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {value.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
           ))}
         </div>
       </div>

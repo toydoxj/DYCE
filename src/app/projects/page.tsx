@@ -39,7 +39,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         subtitle="다양한 분야의 구조설계 및 안전진단 실적"
       />
 
-      <section className="py-10 sm:py-16">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Suspense fallback={null}>
             <ProjectFilter filterOptions={filterOptions} />

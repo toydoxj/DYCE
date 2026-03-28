@@ -69,7 +69,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         {project.structureType.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1">
             {project.structureType.map((s) => (
-              <span key={s} className="text-xs text-gold">
+              <span key={s} className="text-xs text-brand">
                 {s}
               </span>
             ))}

@@ -9,7 +9,7 @@ const infoItems = [
   {
     icon: FileText,
     label: "사업자등록번호",
-    value: "120-81-47622",
+    value: "211-81-98082",
   },
   {
     icon: Award,
@@ -20,13 +20,13 @@ const infoItems = [
 
 export function CompanyInfo() {
   return (
-    <section className="bg-navy py-16">
+    <section className="bg-navy py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 sm:grid-cols-3">
           {infoItems.map((item) => (
             <div key={item.label} className="flex items-center gap-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white/10">
-                <item.icon className="h-6 w-6 text-gold" />
+                <item.icon className="h-6 w-6 text-brand" />
               </div>
               <div>
                 <p className="text-xs text-white/50">{item.label}</p>

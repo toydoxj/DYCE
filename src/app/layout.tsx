@@ -11,6 +11,7 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://dyce.kr"),
   title: {
     default: "(주)동양구조 | 구조설계 및 안전진단 전문업체",
     template: "%s | (주)동양구조",

@@ -17,7 +17,7 @@ export default function AboutPage() {
         subtitle="1981년부터 이어온 구조설계 전문 기업"
       />
 
-      <section className="py-12 sm:py-16">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* 인사말 */}
           <div className="mx-auto max-w-3xl text-center">

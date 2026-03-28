@@ -9,10 +9,10 @@ export const businessAreas: BusinessArea[] = [
       "건축물의 안전성과 경제성을 동시에 확보하는 최적의 구조설계를 제공합니다. 초고층 건축물부터 일반 건축물까지 다양한 프로젝트에 대한 풍부한 경험을 바탕으로, 설계 초기 단계부터 시공 완료까지 체계적인 구조 솔루션을 제안합니다.",
     icon: "Building2",
     services: [
-      { title: "신축 구조설계", description: "공동주택, 업무시설, 교육시설 등 다양한 용도의 신축 건축물 구조설계" },
-      { title: "증축·개축 구조설계", description: "기존 건축물의 증축 및 개축에 따른 구조 검토 및 설계" },
-      { title: "구조 검토 및 자문", description: "설계 단계에서의 구조 타당성 검토 및 기술 자문" },
-      { title: "구조계산서 작성", description: "인허가 및 심의를 위한 구조계산서 작성" },
+      { title: "초고층 및 장스팬 구조설계", description: "초고층 건축물, 장스팬 구조물 등 고난도 구조설계" },
+      { title: "공장 및 특수 구조물 설계", description: "공장, 플랜트 등 특수 용도 구조물의 설계" },
+      { title: "구조 감리 및 현장 구조자문", description: "시공 현장에서의 구조 감리 및 기술 자문 지원" },
+      { title: "V.E 지원", description: "설계 VE(Value Engineering)를 통한 최적 구조 솔루션 제안" },
     ],
   },
   {
@@ -23,10 +23,10 @@ export const businessAreas: BusinessArea[] = [
       "안전진단전문기관 제15호로 지정된 전문성을 바탕으로, 건축물의 구조 안전성을 정밀하게 진단하고 평가합니다. 체계적인 점검 프로세스와 최신 장비를 활용하여 정확한 진단 결과를 제공합니다.",
     icon: "Shield",
     services: [
-      { title: "정밀안전진단", description: "건축물의 구조적 안전성을 종합적으로 평가하는 정밀안전진단" },
-      { title: "정밀안전점검", description: "건축물의 현 상태를 파악하기 위한 정밀안전점검" },
-      { title: "긴급안전점검", description: "재난 및 사고 발생 시 긴급 안전점검" },
-      { title: "내진성능평가", description: "기존 건축물의 내진 성능 평가 및 보강 설계" },
+      { title: "품질 시험", description: "구조물의 품질 확인을 위한 각종 시험 및 검사" },
+      { title: "건축물 내구성 진단", description: "건축물의 구조적 내구성을 종합적으로 평가하는 정밀진단" },
+      { title: "보수 보강 및 내진 보강 설계", description: "노후 건축물의 보수·보강 및 내진 성능 향상 설계" },
+      { title: "리모델링", description: "기존 건축물의 리모델링에 따른 구조 검토 및 설계" },
     ],
   },
   {

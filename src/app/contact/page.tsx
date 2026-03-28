@@ -44,7 +44,7 @@ export default function ContactPage() {
         subtitle="구조설계, 안전진단 등 모든 문의를 환영합니다"
       />
 
-      <section className="py-12 sm:py-16">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-5">
             {/* 연락처 정보 */}
@@ -54,7 +54,7 @@ export default function ContactPage() {
                 {contactItems.map((item) => (
                   <Card key={item.label}>
                     <CardContent className="flex items-start gap-3 p-4">
-                      <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+                      <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
                       <div>
                         <p className="text-xs text-muted-foreground">
                           {item.label}
@@ -62,7 +62,7 @@ export default function ContactPage() {
                         {item.href ? (
                           <a
                             href={item.href}
-                            className="text-sm font-medium text-navy hover:text-gold transition-colors"
+                            className="text-sm font-medium text-navy hover:text-brand transition-colors"
                           >
                             {item.value}
                           </a>

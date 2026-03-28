@@ -25,7 +25,7 @@ export default function BusinessPage() {
             <Link
               key={area.id}
               href={`#${area.id}`}
-              className="whitespace-nowrap px-4 py-3 text-sm font-medium text-navy/70 transition-colors hover:text-navy border-b-2 border-transparent hover:border-gold"
+              className="whitespace-nowrap px-4 py-3 text-sm font-medium text-navy/70 transition-colors hover:text-navy border-b-2 border-transparent hover:border-brand"
             >
               {area.title}
             </Link>
