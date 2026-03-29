@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Project } from "@/types";
@@ -9,7 +10,18 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Card className="border transition-all hover:shadow-md">
+    <Card className="overflow-hidden border transition-all hover:shadow-md">
+      {project.coverImage && (
+        <div className="relative h-48 w-full bg-muted">
+          <Image
+            src={project.coverImage}
+            alt={project.projectName}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        </div>
+      )}
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold text-navy line-clamp-2">

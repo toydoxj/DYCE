@@ -13,6 +13,7 @@ export interface Project {
   address: string;
   status: string;
   contractDate: string | null;
+  coverImage: string | null;
 }
 
 // 사업 분야

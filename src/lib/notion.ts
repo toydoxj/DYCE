@@ -79,8 +79,41 @@ function getDate(property: PropertyValue): string | null {
   return null;
 }
 
+// 페이지 본문에서 첫 번째 이미지 URL 추출
+async function getFirstImage(pageId: string): Promise<string | null> {
+  try {
+    const response = await notion.blocks.children.list({
+      block_id: pageId,
+      page_size: 20,
+    });
+
+    for (const block of response.results) {
+      if ("type" in block && block.type === "image") {
+        const image = block.image;
+        if (image.type === "file") {
+          return image.file.url;
+        }
+        if (image.type === "external") {
+          return image.external.url;
+        }
+      }
+    }
+  } catch {
+    // 블록 조회 실패 시 무시
+  }
+  return null;
+}
+
+// 페이지 커버 이미지 URL 추출
+function getCoverImage(page: PageObjectResponse): string | null {
+  if (!page.cover) return null;
+  if (page.cover.type === "file") return page.cover.file.url;
+  if (page.cover.type === "external") return page.cover.external.url;
+  return null;
+}
+
 // Notion 페이지를 Project 타입으로 변환
-function pageToProject(page: PageObjectResponse): Project {
+function pageToProject(page: PageObjectResponse, coverImage: string | null): Project {
   const p = page.properties;
 
   return {
@@ -97,6 +130,7 @@ function pageToProject(page: PageObjectResponse): Project {
     address: getRichText(p[PROP.ADDRESS]),
     status: getSelect(p[PROP.STATUS]),
     contractDate: getDate(p[PROP.CONTRACT_DATE]),
+    coverImage,
   };
 }
 
@@ -162,9 +196,17 @@ export async function getProjects(filter?: {
         start_cursor: startCursor,
       } as Parameters<typeof notion.databases.query>[0]);
 
-      const projects = response.results
-        .filter((page): page is PageObjectResponse => "properties" in page)
-        .map(pageToProject);
+      const pages = response.results.filter(
+        (page): page is PageObjectResponse => "properties" in page
+      );
+
+      const projects = await Promise.all(
+        pages.map(async (page) => {
+          const cover = getCoverImage(page);
+          const image = cover ?? (await getFirstImage(page.id));
+          return pageToProject(page, image);
+        })
+      );
       allResults.push(...projects);
 
       hasMore = response.has_more;
