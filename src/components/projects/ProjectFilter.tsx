@@ -9,17 +9,18 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { FilterOptions } from "@/types";
-import { useProjectFilter } from "@/hooks/useProjectFilter";
 import { X } from "lucide-react";
 
 interface ProjectFilterProps {
   filterOptions: FilterOptions;
+  usage: string;
+  structureType: string;
+  status: string;
+  setFilter: (key: string, value: string) => void;
+  clearFilters: () => void;
 }
 
-export function ProjectFilter({ filterOptions }: ProjectFilterProps) {
-  const { usage, structureType, status, setFilter, clearFilters } =
-    useProjectFilter();
-
+export function ProjectFilter({ filterOptions, usage, structureType, status, setFilter, clearFilters }: ProjectFilterProps) {
   const hasFilters = usage || structureType || status;
 
   return (

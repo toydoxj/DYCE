@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { PageHero } from "@/components/layout";
-import { ProjectFilter, ProjectListClient } from "@/components/projects";
+import { ProjectListClient } from "@/components/projects";
 import { getProjects, getFilterOptions } from "@/lib/notion";
 
 export const revalidate = 3600; // ISR: 1시간마다 재검증
@@ -41,13 +40,7 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
 
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Suspense fallback={null}>
-            <ProjectFilter filterOptions={filterOptions} />
-          </Suspense>
-
-          <div className="mt-8">
-            <ProjectListClient projects={projects} />
-          </div>
+          <ProjectListClient projects={projects} filterOptions={filterOptions} />
         </div>
       </section>
     </>

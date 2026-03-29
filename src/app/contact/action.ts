@@ -2,13 +2,17 @@
 
 import { z } from "zod/v4";
 import nodemailer from "nodemailer";
+import { contactSchema } from "@/lib/schemas/contact";
 
-const contactSchema = z.object({
-  name: z.string().check(z.minLength(1, "이름을 입력해주세요")),
-  email: z.email("올바른 이메일 주소를 입력해주세요"),
-  phone: z.string().optional(),
-  message: z.string().check(z.minLength(1, "문의내용을 입력해주세요")),
-});
+// HTML 이스케이핑으로 XSS 방지
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -21,6 +25,12 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function submitContact(formData: FormData) {
+  // honeypot: 봇이 숨겨진 필드를 채우면 차단
+  const honeypot = formData.get("website");
+  if (honeypot) {
+    return { success: true as const };
+  }
+
   const data = {
     name: formData.get("name"),
     email: formData.get("email"),
@@ -37,13 +47,16 @@ export async function submitContact(formData: FormData) {
     };
   }
 
-  const { name, email, phone, message } = result.data;
+  const name = escapeHtml(result.data.name);
+  const email = escapeHtml(result.data.email);
+  const phone = result.data.phone ? escapeHtml(result.data.phone) : "-";
+  const message = escapeHtml(result.data.message);
 
   try {
     await transporter.sendMail({
       from: `"동양구조 홈페이지" <${process.env.SMTP_USER}>`,
       to: "dyce@dyce.kr",
-      replyTo: email,
+      replyTo: result.data.email,
       subject: `[홈페이지문의] ${name}님의 문의`,
       html: `
         <h2>홈페이지 문의가 접수되었습니다</h2>
@@ -58,7 +71,7 @@ export async function submitContact(formData: FormData) {
           </tr>
           <tr style="border-bottom:1px solid #eee;">
             <td style="padding:10px;font-weight:bold;">전화번호</td>
-            <td style="padding:10px;">${phone || "-"}</td>
+            <td style="padding:10px;">${phone}</td>
           </tr>
           <tr>
             <td style="padding:10px;font-weight:bold;vertical-align:top;">문의내용</td>

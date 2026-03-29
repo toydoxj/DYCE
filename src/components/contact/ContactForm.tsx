@@ -2,26 +2,27 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod/v4";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { submitContact } from "@/app/contact/action";
 import { useState, useActionState } from "react";
-
-const contactSchema = z.object({
-  name: z.string().check(z.minLength(1, "이름을 입력해주세요")),
-  email: z.email("올바른 이메일 주소를 입력해주세요"),
-  phone: z.string().optional(),
-  message: z.string().check(z.minLength(1, "문의내용을 입력해주세요")),
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
+import { contactSchema, type ContactFormData } from "@/lib/schemas/contact";
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState("");
+
+  const {
+    register,
+    formState: { errors },
+    reset,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+    mode: "onBlur",
+  });
+
   const [, formAction, isPending] = useActionState(
     async (_prev: unknown, formData: FormData) => {
       setServerError("");
@@ -37,15 +38,6 @@ export function ContactForm() {
     },
     null
   );
-
-  const {
-    register,
-    formState: { errors },
-    reset,
-  } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-    mode: "onBlur",
-  });
 
   if (submitted) {
     return (
@@ -91,6 +83,11 @@ export function ContactForm() {
           action={formAction}
           className="space-y-5"
         >
+          {/* honeypot: 봇 방지용 숨겨진 필드 */}
+          <div className="absolute -left-[9999px]" aria-hidden="true">
+            <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+          </div>
+
           <div>
             <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
               이름 <span className="text-red-500">*</span>
