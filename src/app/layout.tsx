@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_KR } from "next/font/google";
 import { Header } from "@/components/layout";
 import { Footer } from "@/components/layout";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 const notoSansKR = Noto_Sans_KR({
@@ -33,9 +34,11 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${notoSansKR.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <TooltipProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </TooltipProvider>
       </body>
     </html>
   );

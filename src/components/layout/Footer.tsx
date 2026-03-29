@@ -2,6 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { COMPANY } from "@/lib/constants";
 import { Mail, Phone } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 export function Footer() {
   return (
@@ -31,15 +37,35 @@ export function Footer() {
           {/* 연락처 */}
           <div>
             <h4 className="font-semibold text-white">연락처</h4>
-            <div className="mt-4 space-y-2 text-sm">
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-brand" />
-                <span>{COMPANY.phone}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-brand" />
-                <span>{COMPANY.email}</span>
-              </div>
+            <div className="mt-4 space-y-3 text-sm">
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <a
+                      href={`tel:${COMPANY.phone}`}
+                      className="flex items-center gap-2 transition-colors hover:text-brand-light w-fit"
+                    />
+                  }
+                >
+                  <Phone className="h-4 w-4 text-brand" />
+                  <span>{COMPANY.phone}</span>
+                </TooltipTrigger>
+                <TooltipContent>전화 걸기</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <a
+                      href={`mailto:${COMPANY.email}`}
+                      className="flex items-center gap-2 transition-colors hover:text-brand-light w-fit"
+                    />
+                  }
+                >
+                  <Mail className="h-4 w-4 text-brand" />
+                  <span>{COMPANY.email}</span>
+                </TooltipTrigger>
+                <TooltipContent>이메일 보내기</TooltipContent>
+              </Tooltip>
             </div>
           </div>
 
@@ -47,25 +73,26 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-white">바로가기</h4>
             <nav className="mt-4 flex flex-col gap-2 text-sm">
-              <Link href="/about" className="hover:text-brand-light transition-colors">
+              <Link href="/about" className="hover:text-brand-light transition-colors w-fit">
                 회사소개
               </Link>
-              <Link href="/business" className="hover:text-brand-light transition-colors">
+              <Link href="/business" className="hover:text-brand-light transition-colors w-fit">
                 사업분야
               </Link>
-              <Link href="/projects" className="hover:text-brand-light transition-colors">
+              <Link href="/projects" className="hover:text-brand-light transition-colors w-fit">
                 수행실적
               </Link>
-              <Link href="/contact" className="hover:text-brand-light transition-colors">
+              <Link href="/contact" className="hover:text-brand-light transition-colors w-fit">
                 문의하기
               </Link>
             </nav>
           </div>
         </div>
 
-        <div className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-white/40">
+        <Separator className="mt-10 bg-white/10" />
+        <p className="pt-6 text-center text-xs text-white/40">
           © {new Date().getFullYear()} {COMPANY.copyrightName}
-        </div>
+        </p>
       </div>
     </footer>
   );

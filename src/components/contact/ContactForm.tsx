@@ -5,10 +5,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { submitContact } from "@/app/contact/action";
 import { useState, useActionState } from "react";
 import { contactSchema, type ContactFormData } from "@/lib/schemas/contact";
+import { CheckCircle } from "lucide-react";
 
 export function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
@@ -43,20 +45,8 @@ export function ContactForm() {
     return (
       <Card>
         <CardContent className="flex flex-col items-center py-12">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-            <svg
-              className="h-8 w-8 text-green-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-brand/10">
+            <CheckCircle className="h-8 w-8 text-brand" />
           </div>
           <h3 className="mt-4 text-lg font-semibold text-navy">
             문의가 접수되었습니다
@@ -88,39 +78,39 @@ export function ContactForm() {
             <input type="text" name="website" tabIndex={-1} autoComplete="off" />
           </div>
 
-          <div>
-            <label htmlFor="name" className="mb-1.5 block text-sm font-medium">
-              이름 <span className="text-red-500">*</span>
-            </label>
+          <div className="space-y-2">
+            <Label htmlFor="name">
+              이름 <span className="text-destructive">*</span>
+            </Label>
             <Input
               id="name"
               {...register("name")}
               placeholder="이름을 입력해주세요"
+              aria-invalid={!!errors.name}
             />
             {errors.name && (
-              <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>
+              <p className="text-xs text-destructive">{errors.name.message}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
-              이메일 <span className="text-red-500">*</span>
-            </label>
+          <div className="space-y-2">
+            <Label htmlFor="email">
+              이메일 <span className="text-destructive">*</span>
+            </Label>
             <Input
               id="email"
               type="email"
               {...register("email")}
               placeholder="example@email.com"
+              aria-invalid={!!errors.email}
             />
             {errors.email && (
-              <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>
+              <p className="text-xs text-destructive">{errors.email.message}</p>
             )}
           </div>
 
-          <div>
-            <label htmlFor="phone" className="mb-1.5 block text-sm font-medium">
-              전화번호
-            </label>
+          <div className="space-y-2">
+            <Label htmlFor="phone">전화번호</Label>
             <Input
               id="phone"
               type="tel"
@@ -129,31 +119,33 @@ export function ContactForm() {
             />
           </div>
 
-          <div>
-            <label htmlFor="message" className="mb-1.5 block text-sm font-medium">
-              문의내용 <span className="text-red-500">*</span>
-            </label>
+          <div className="space-y-2">
+            <Label htmlFor="message">
+              문의내용 <span className="text-destructive">*</span>
+            </Label>
             <Textarea
               id="message"
               {...register("message")}
               placeholder="문의하실 내용을 입력해주세요"
               rows={6}
+              aria-invalid={!!errors.message}
             />
             {errors.message && (
-              <p className="mt-1 text-xs text-red-500">
+              <p className="text-xs text-destructive">
                 {errors.message.message}
               </p>
             )}
           </div>
 
           {serverError && (
-            <p className="text-sm text-red-500">{serverError}</p>
+            <p className="text-sm text-destructive">{serverError}</p>
           )}
 
           <Button
             type="submit"
             disabled={isPending}
             className="w-full bg-navy hover:bg-navy-dark"
+            size="lg"
           >
             {isPending ? "전송 중..." : "문의 보내기"}
           </Button>

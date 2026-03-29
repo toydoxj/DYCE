@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   return (
@@ -34,19 +35,22 @@ export function HeroSection() {
             입니다.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="/business"
-              className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-brand px-2.5 text-sm font-medium text-white transition-colors hover:bg-brand-dark"
+            <Button
+              size="lg"
+              className="bg-brand hover:bg-brand-dark text-white"
+              render={<Link href="/business" />}
             >
               사업분야 보기
               <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/contact"
-              className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-white/30 px-2.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="bg-transparent border-white/30 text-white hover:bg-white/10 hover:text-white"
+              render={<Link href="/contact" />}
             >
               문의하기
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
