@@ -19,13 +19,13 @@ export default function BusinessPage() {
       />
 
       {/* 탭 네비게이션 */}
-      <nav className="sticky top-16 z-40 border-b bg-white/95 backdrop-blur-sm lg:top-20">
+      <nav className="sticky top-16 z-40 bg-white/95 backdrop-blur-sm shadow-[0_1px_0_0_rgba(0,0,0,0.04)] lg:top-[72px]">
         <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 sm:px-6 lg:px-8">
           {businessAreas.map((area) => (
             <Link
               key={area.id}
               href={`#${area.id}`}
-              className="whitespace-nowrap px-4 py-3 text-sm font-medium text-navy/70 transition-colors hover:text-navy border-b-2 border-transparent hover:border-brand"
+              className="whitespace-nowrap px-4 py-3.5 text-[13px] font-medium text-slate transition-colors hover:text-navy border-b-2 border-transparent hover:border-brand"
             >
               {area.title}
             </Link>

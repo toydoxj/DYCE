@@ -1,52 +1,44 @@
-import { Building, Award, FileText } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Building, Award, FileText, Users } from "lucide-react";
 
-const infoItems = [
-  {
-    icon: Building,
-    label: "대표이사",
-    value: "김효진",
-  },
+const stats = [
   {
     icon: FileText,
-    label: "사업자등록번호",
-    value: "211-81-98082",
+    value: "2,500+",
+    label: "수행 프로젝트",
+  },
+  {
+    icon: Users,
+    value: "40+",
+    label: "Years of Experience",
+  },
+  {
+    icon: Building,
+    value: "4.5M",
+    label: "설계면적 (m²)",
   },
   {
     icon: Award,
-    label: "안전진단전문기관",
-    value: "제15호",
-    badge: true,
+    value: "50+",
+    label: "수상 실적",
   },
 ];
 
 export function CompanyInfo() {
   return (
-    <section className="bg-navy py-16 sm:py-20">
+    <section className="bg-navy py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-8 sm:grid-cols-3">
-          {infoItems.map((item, index) => (
-            <div key={item.label} className="flex items-center gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white/10">
-                <item.icon className="h-6 w-6 text-brand" />
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-white/[0.06]">
+                <stat.icon className="h-5 w-5 text-brand-light" />
               </div>
-              <div>
-                <p className="text-xs text-white/50">{item.label}</p>
-                <div className="flex items-center gap-2">
-                  <p className="text-lg font-semibold text-white">
-                    {item.value}
-                  </p>
-                  {item.badge && (
-                    <Badge variant="secondary" className="bg-brand/20 text-brand-light border-none text-[10px]">
-                      인증
-                    </Badge>
-                  )}
-                </div>
-              </div>
-              {index < infoItems.length - 1 && (
-                <Separator orientation="vertical" className="ml-auto hidden h-10 bg-white/10 sm:block" />
-              )}
+              <p className="mt-5 font-heading text-4xl font-extrabold text-white">
+                {stat.value}
+              </p>
+              <p className="mt-2 text-sm text-white/40">
+                {stat.label}
+              </p>
             </div>
           ))}
         </div>

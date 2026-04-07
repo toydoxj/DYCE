@@ -220,6 +220,95 @@ export async function getProjects(filter?: {
   }
 }
 
+// 단일 프로젝트 조회
+export async function getProjectById(id: string): Promise<Project | null> {
+  if (!isConfigured()) return null;
+
+  try {
+    const page = await notion.pages.retrieve({ page_id: id });
+    if (!("properties" in page)) return null;
+
+    const typedPage = page as PageObjectResponse;
+    const cover = getCoverImage(typedPage);
+    const image = cover ?? (await getFirstImage(typedPage.id));
+    return pageToProject(typedPage, image);
+  } catch (error) {
+    console.error("Notion API 프로젝트 상세 조회 실패:", error);
+    return null;
+  }
+}
+
+// 페이지 본문의 모든 이미지 URL 추출
+export async function getProjectImages(pageId: string): Promise<string[]> {
+  if (!isConfigured()) return [];
+
+  try {
+    const images: string[] = [];
+    let cursor: string | undefined;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await notion.blocks.children.list({
+        block_id: pageId,
+        page_size: 100,
+        start_cursor: cursor,
+      });
+
+      for (const block of response.results) {
+        if ("type" in block && block.type === "image") {
+          const image = block.image;
+          if (image.type === "file") images.push(image.file.url);
+          else if (image.type === "external") images.push(image.external.url);
+        }
+      }
+
+      hasMore = response.has_more;
+      cursor = response.next_cursor ?? undefined;
+    }
+
+    return images;
+  } catch {
+    return [];
+  }
+}
+
+// 같은 용도의 관련 프로젝트 조회 (최대 4개)
+export async function getRelatedProjects(
+  currentId: string,
+  usages: string[],
+): Promise<Project[]> {
+  if (!isConfigured() || usages.length === 0) return [];
+
+  try {
+    const response = await notion.databases.query({
+      database_id: DATABASE_ID,
+      page_size: 5,
+      filter: {
+        property: PROP.USAGE,
+        multi_select: { contains: usages[0] },
+      },
+      sorts: [{ property: PROP.CONTRACT_DATE, direction: "descending" }],
+    });
+
+    const pages = response.results.filter(
+      (page): page is PageObjectResponse =>
+        "properties" in page && page.id !== currentId,
+    );
+
+    const projects = await Promise.all(
+      pages.slice(0, 4).map(async (page) => {
+        const cover = getCoverImage(page);
+        const image = cover ?? (await getFirstImage(page.id));
+        return pageToProject(page, image);
+      }),
+    );
+
+    return projects;
+  } catch {
+    return [];
+  }
+}
+
 // 필터 옵션 추출
 export async function getFilterOptions(): Promise<FilterOptions> {
   if (!isConfigured()) return { usages: [], structureTypes: [], statuses: [] };

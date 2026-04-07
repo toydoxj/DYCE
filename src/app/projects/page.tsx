@@ -35,10 +35,10 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
     <>
       <PageHero
         title="수행실적"
-        subtitle="다양한 분야의 구조설계 및 안전진단 실적"
+        subtitle="2,500+ 프로젝트, 다양한 분야의 구조설계 및 안전진단 실적"
       />
 
-      <section className="py-16 sm:py-20">
+      <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <ProjectListClient projects={projects} filterOptions={filterOptions} />
         </div>

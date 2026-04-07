@@ -53,7 +53,15 @@ src/
 
 **문의하기**: `src/app/contact/action.ts` Server Action + nodemailer SMTP 전송 (수신: dyce@dyce.kr)
 
-**색상 시스템**: `globals.css`의 `@theme inline`에서 정의. `navy`(#2D3436)은 주조색, `brand`(#669900)은 포인트
+**색상 시스템**: `globals.css`의 `@theme inline`에서 정의. Stitch "Snug Editorial 2026" 디자인 시스템 기반.
+- `navy`(#0F172A) 주조색, `brand`(#72B91F) 포인트, `slate`(#475569) 보조
+- Surface 계층: `surface`(#f7f9fb) → `surface-low`(#f2f4f6) → `surface-lowest`(#fff) → `surface-high`(#e6e8ea)
+- No-Line Rule: 1px 보더 대신 배경색 전환으로 섹션 구분
+- 카드: rounded-2xl, 구분선 없이 ambient shadow
+- 버튼: Primary=gradient pill(from-brand to-brand-light), Secondary=surface pill
+- Glass 효과: `.glass` (backdrop-blur-20px, 70% opacity)
+
+**타이포그래피**: Manrope(font-heading, Display/Headline) + Inter(font-sans, Body/Label)
 
 **컴포넌트 구조**: 디렉토리별 `index.ts` 배럴 파일. shadcn/ui는 `base-nova` 스타일 + `@base-ui/react` 사용 (Radix UI 아님 → `asChild` 대신 `render` prop 사용)
 

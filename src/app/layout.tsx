@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
-import { Noto_Sans_KR } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import { Header } from "@/components/layout";
 import { Footer } from "@/components/layout";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
-const notoSansKR = Noto_Sans_KR({
-  variable: "--font-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${notoSansKR.variable} h-full antialiased`}>
+    <html lang="ko" className={`${inter.variable} ${manrope.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <TooltipProvider>
           <Header />

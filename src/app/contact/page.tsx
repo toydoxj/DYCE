@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/layout";
 import { ContactForm } from "@/components/contact";
-import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { COMPANY } from "@/lib/constants";
 
@@ -44,43 +43,46 @@ export default function ContactPage() {
         subtitle="구조설계, 안전진단 등 모든 문의를 환영합니다"
       />
 
-      <section className="py-16 sm:py-20">
+      <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-5">
+          <div className="grid gap-12 lg:grid-cols-5">
             {/* 연락처 정보 */}
             <div className="lg:col-span-2">
-              <h2 className="text-xl font-bold text-navy">연락처</h2>
+              <h2 className="font-heading text-xl font-bold text-navy">연락처</h2>
               <div className="mt-6 space-y-4">
                 {contactItems.map((item) => (
-                  <Card key={item.label}>
-                    <CardContent className="flex items-start gap-3 p-4">
-                      <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-brand" />
-                      <div>
-                        <p className="text-xs text-muted-foreground">
-                          {item.label}
+                  <div
+                    key={item.label}
+                    className="flex items-start gap-4 rounded-2xl bg-surface p-5"
+                  >
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white">
+                      <item.icon className="h-5 w-5 text-brand" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-slate">
+                        {item.label}
+                      </p>
+                      {item.href ? (
+                        <a
+                          href={item.href}
+                          className="text-sm font-semibold text-navy hover:text-brand transition-colors"
+                        >
+                          {item.value}
+                        </a>
+                      ) : (
+                        <p className="text-sm font-semibold text-navy">
+                          {item.value}
                         </p>
-                        {item.href ? (
-                          <a
-                            href={item.href}
-                            className="text-sm font-medium text-navy hover:text-brand transition-colors"
-                          >
-                            {item.value}
-                          </a>
-                        ) : (
-                          <p className="text-sm font-medium text-navy">
-                            {item.value}
-                          </p>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
+                      )}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
 
             {/* 문의 폼 */}
             <div className="lg:col-span-3">
-              <h2 className="text-xl font-bold text-navy">문의 양식</h2>
+              <h2 className="font-heading text-xl font-bold text-navy">문의 양식</h2>
               <div className="mt-6">
                 <ContactForm />
               </div>

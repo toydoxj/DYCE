@@ -83,20 +83,20 @@ export function BusinessSection({ area, index }: BusinessSectionProps) {
   return (
     <section
       id={area.id}
-      className={`py-16 sm:py-20 ${isAlternate ? "bg-muted/30" : ""}`}
+      className={`py-20 sm:py-24 ${isAlternate ? "bg-surface" : ""}`}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-start gap-4">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-navy text-white">
-            {Icon && <Icon className="h-7 w-7" />}
+        <div className="flex items-start gap-5">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-navy to-navy-light text-white">
+            {Icon && <Icon className="h-6 w-6" />}
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-navy">{area.title}</h2>
-            <p className="text-sm text-muted-foreground">{area.subtitle}</p>
+            <h2 className="font-heading text-2xl font-extrabold text-navy">{area.title}</h2>
+            <p className="text-sm text-brand font-medium">{area.subtitle}</p>
           </div>
         </div>
 
-        <div className="mt-6 max-w-3xl space-y-4 text-base leading-relaxed text-muted-foreground">
+        <div className="mt-8 max-w-3xl space-y-4 text-base leading-relaxed text-slate">
           {area.description.split("\n\n").map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
           ))}
