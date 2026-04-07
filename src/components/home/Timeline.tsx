@@ -8,12 +8,15 @@ export function Timeline() {
         <FadeIn>
           <div className="text-center">
             <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
-              History
+              연혁
             </span>
             <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">
-              A Legacy of Stability
+              동양구조의 발자취
             </h2>
-            <p className="mt-4 text-slate">
+            <p className="mt-2 text-xs font-medium tracking-wide text-slate/50">
+              A Legacy of Stability
+            </p>
+            <p className="mt-3 text-slate">
               1981년부터 이어온 동양구조의 발자취
             </p>
           </div>
@@ -25,7 +28,7 @@ export function Timeline() {
             {/* 가로선 */}
             <div className="absolute left-0 right-0 top-4 h-px bg-surface-high" />
 
-            <div className="grid grid-cols-7 gap-4">
+            <div className="grid grid-cols-8 gap-4">
               {timeline.map((item, index) => (
                 <FadeIn key={item.year} delay={Math.min(index + 1, 3) as 1 | 2 | 3}>
                   <div className="relative pt-10">

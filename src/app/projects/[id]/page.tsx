@@ -160,11 +160,16 @@ export default async function ProjectDetailPage({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-10">
               <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
-                Specifications
+                제원
               </span>
-              <h2 className="font-heading text-2xl font-extrabold tracking-tight text-navy">
-                Technical Data
-              </h2>
+              <div>
+                <h2 className="font-heading text-2xl font-extrabold tracking-tight text-navy">
+                  기술 데이터
+                </h2>
+                <p className="mt-0.5 text-xs font-medium tracking-wide text-slate/50">
+                  Technical Data
+                </p>
+              </div>
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -214,11 +219,16 @@ export default async function ProjectDetailPage({
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-10">
               <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
-                Gallery
+                갤러리
               </span>
-              <h2 className="font-heading text-2xl font-extrabold tracking-tight text-navy">
-                Project Gallery
-              </h2>
+              <div>
+                <h2 className="font-heading text-2xl font-extrabold tracking-tight text-navy">
+                  프로젝트 갤러리
+                </h2>
+                <p className="mt-0.5 text-xs font-medium tracking-wide text-slate/50">
+                  Project Gallery
+                </p>
+              </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -248,11 +258,16 @@ export default async function ProjectDetailPage({
             <div className="flex items-center justify-between mb-10">
               <div className="flex items-center gap-3">
                 <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
-                  Related
+                  관련
                 </span>
-                <h2 className="font-heading text-2xl font-extrabold tracking-tight text-navy">
-                  관련 프로젝트
-                </h2>
+                <div>
+                  <h2 className="font-heading text-2xl font-extrabold tracking-tight text-navy">
+                    관련 프로젝트
+                  </h2>
+                  <p className="mt-0.5 text-xs font-medium tracking-wide text-slate/50">
+                    Related Projects
+                  </p>
+                </div>
               </div>
               <Link
                 href="/projects"

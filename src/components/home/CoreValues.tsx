@@ -4,22 +4,22 @@ import { FadeIn } from "@/components/ui/FadeIn";
 const values = [
   {
     icon: Lightbulb,
-    title: "Structural Solutions",
-    titleKr: "최적화된 솔루션",
+    title: "최적화된 솔루션",
+    titleEn: "Structural Solutions",
     description:
       "수십 년간 축적된 데이터와 고도화된 구조 해석 능력을 바탕으로, 최고 수준의 안전성과 VE(Value Engineering)를 통한 경제적 설계를 제공합니다.",
   },
   {
     icon: Handshake,
-    title: "Innovation-Driven",
-    titleKr: "혁신 기반 협업",
+    title: "혁신 기반 협업",
+    titleEn: "Innovation-Driven",
     description:
       "건축사, 시공사 및 발주처와의 긴밀한 파트너십을 구축하며, BIM 등 첨단 도구를 활용하여 설계 초기부터 최적의 엔지니어링 서비스를 제공합니다.",
   },
   {
     icon: Cpu,
-    title: "Advanced Technology",
-    titleKr: "최신 기술과 지식",
+    title: "최신 기술과 지식",
+    titleEn: "Advanced Technology",
     description:
       "끊임없는 연구와 학습으로 최신 구조공학 기술과 해석 기법을 실무에 적용하며, 자체 프로그램 개발을 통해 설계 품질을 극대화합니다.",
   },
@@ -32,12 +32,15 @@ export function CoreValues() {
         <FadeIn>
           <div className="text-center">
             <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
-              Core Values
+              핵심 가치
             </span>
             <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">
-              Excellence in Every Detail
+              모든 디테일에 담긴 전문성
             </h2>
-            <p className="mt-4 text-slate">
+            <p className="mt-2 text-xs font-medium tracking-wide text-slate/50">
+              Excellence in Every Detail
+            </p>
+            <p className="mt-3 text-slate">
               안전을 넘어 혁신을 구조하다, 동양구조의 핵심 가치
             </p>
           </div>
@@ -53,8 +56,8 @@ export function CoreValues() {
                 <h3 className="mt-6 font-heading text-lg font-bold text-navy">
                   {value.title}
                 </h3>
-                <p className="mt-1 text-xs font-medium text-brand">
-                  {value.titleKr}
+                <p className="mt-0.5 text-xs font-medium text-slate/40">
+                  {value.titleEn}
                 </p>
                 <p className="mt-4 text-sm leading-relaxed text-slate">
                   {value.description}

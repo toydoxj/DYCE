@@ -39,22 +39,22 @@ export function Header() {
               height={36}
               className="h-8 w-8 lg:h-9 lg:w-9"
             />
-            <span
-              className={`font-heading text-xl font-extrabold tracking-tight ${
-                isTransparent ? "text-white" : "text-navy"
-              }`}
-            >
-              DYCE
-            </span>
-            <span
-              className={`hidden rounded-full px-2.5 py-0.5 text-[10px] font-semibold sm:inline-block ${
-                isTransparent
-                  ? "bg-white/15 text-white/80"
-                  : "bg-brand/10 text-brand"
-              }`}
-            >
-              Engineering
-            </span>
+            <div className="flex flex-col">
+              <span
+                className={`font-heading text-lg font-extrabold tracking-tight leading-tight ${
+                  isTransparent ? "text-white" : "text-navy"
+                }`}
+              >
+                (주)동양구조
+              </span>
+              <span
+                className={`hidden text-[10px] font-medium tracking-wide sm:inline-block ${
+                  isTransparent ? "text-white/40" : "text-slate/50"
+                }`}
+              >
+                Dongyang Consulting Engineers. Co., Ltd.
+              </span>
+            </div>
           </Link>
 
           {/* 데스크톱 네비게이션 */}

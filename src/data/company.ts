@@ -15,6 +15,10 @@ export const companyInfo = {
 
 export const timeline: TimelineEvent[] = [
   {
+    year: "2025",
+    events: ["건축사업관리 등록"],
+  },
+  {
     year: "2016",
     events: ["사무실 이전 (문정동)"],
   },

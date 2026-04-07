@@ -18,9 +18,14 @@ export function Footer() {
                 height={32}
                 className="h-8 w-8 brightness-0 invert"
               />
-              <span className="font-heading text-xl font-extrabold text-white tracking-tight">
-                DYCE
-              </span>
+              <div className="flex flex-col">
+                <span className="font-heading text-lg font-extrabold text-white tracking-tight leading-tight">
+                  (주)동양구조
+                </span>
+                <span className="text-[10px] font-medium tracking-wide text-white/30">
+                  Dongyang Consulting Engineers. Co., Ltd.
+                </span>
+              </div>
             </div>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/50">
               1981년 설립된 구조설계 및 안전진단 전문업체.
@@ -31,7 +36,7 @@ export function Footer() {
           {/* 연락처 */}
           <div className="lg:col-span-3">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-white/30">
-              Contact
+              연락처
             </h4>
             <div className="mt-5 space-y-3 text-sm text-white/60">
               <a
@@ -58,7 +63,7 @@ export function Footer() {
           {/* 바로가기 */}
           <div className="lg:col-span-2">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-white/30">
-              Menu
+              바로가기
             </h4>
             <nav className="mt-5 flex flex-col gap-2.5 text-sm text-white/60">
               <Link href="/about" className="hover:text-white transition-colors w-fit">
@@ -79,7 +84,7 @@ export function Footer() {
           {/* 법적 */}
           <div className="lg:col-span-2">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-white/30">
-              Legal
+              법적 정보
             </h4>
             <div className="mt-5 space-y-2.5 text-sm text-white/60">
               <p>사업자등록번호</p>

@@ -18,11 +18,14 @@ export function BusinessPreview() {
           <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
             <div>
               <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
-                Services
+                사업분야
               </span>
               <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">
-                Integrated Engineering Services
+                통합 엔지니어링 서비스
               </h2>
+              <p className="mt-2 text-xs font-medium tracking-wide text-slate/50">
+                Integrated Engineering Services
+              </p>
               <p className="mt-3 text-slate">
                 전문적인 구조 엔지니어링 서비스를 제공합니다
               </p>

@@ -9,16 +9,16 @@ const stats = [
   {
     icon: Users,
     value: "40+",
-    label: "Years of Experience",
+    label: "업력 (년)",
   },
   {
     icon: Building,
-    value: "4.5M",
+    value: "500M+",
     label: "설계면적 (m²)",
   },
   {
     icon: Award,
-    value: "50+",
+    value: "10+",
     label: "수상 실적",
   },
 ];

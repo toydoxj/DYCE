@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   return (
@@ -31,6 +30,9 @@ export function HeroSection() {
             <br />
             Inspection.
           </h1>
+          <p className="mt-4 text-base font-medium tracking-wide text-white/40">
+            역사와 함께한 구조기술, 첨단을 달고 완성하는 건축구조엔지니어링
+          </p>
 
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/60">
             40여 년의 경험과 기술력으로 건축물의 안전을 설계합니다.
@@ -38,22 +40,19 @@ export function HeroSection() {
           </p>
 
           <div className="mt-12 flex flex-wrap items-center gap-4">
-            <Button
-              size="lg"
-              className="rounded-full bg-gradient-to-r from-brand to-brand-light px-8 py-6 text-sm font-semibold text-white shadow-lg shadow-brand/25 hover:shadow-xl hover:shadow-brand/30 transition-shadow"
-              render={<Link href="/business" />}
+            <Link
+              href="/business"
+              className="inline-flex items-center rounded-full bg-gradient-to-r from-brand to-brand-light px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand/25 hover:shadow-xl hover:shadow-brand/30 transition-shadow"
             >
               사업분야 보기
               <ArrowRight className="ml-1 h-4 w-4" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-full border-white/20 bg-white/5 px-8 py-6 text-sm font-medium text-white backdrop-blur-sm hover:bg-white/10 hover:text-white hover:border-white/30"
-              render={<Link href="/projects" />}
+            </Link>
+            <Link
+              href="/projects"
+              className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-medium text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/30 transition-colors"
             >
               수행실적
-            </Button>
+            </Link>
           </div>
         </div>
       </div>
