@@ -49,10 +49,10 @@ export default function AboutPage() {
                 회사소개
               </span>
               <h1 className="mt-8 font-heading text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                구조적{" "}
-                <em className="not-italic text-brand-light">안정</em>의
+                건축구조의{" "}
+                <em className="not-italic text-brand-light">미래</em>를
                 <br />
-                미래를 설계합니다
+                담아갑니다.
               </h1>
               <p className="mt-3 text-sm font-medium tracking-wide text-white/30">
                 Engineering the Future of Structural Stability
@@ -162,23 +162,46 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 대표이사 & 임원 소개 */}
+      {/* 대표이사 소개 */}
       <section className="bg-surface py-24 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
-              경영진
+              대표이사
             </span>
             <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">
-              경영진 소개
+              대표이사 소개
             </h2>
             <p className="mt-2 text-xs font-medium tracking-wide text-slate/50">
-              Our Leadership
+              CEO
+            </p>
+          </div>
+
+          <div className="mt-14">
+            {teamMembers.filter((m) => m.position === "대표이사").map((member) => (
+              <ProfileCard key={member.name} member={member} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 임원 소개 */}
+      <section className="py-24 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
+              임원
+            </span>
+            <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">
+              임원 소개
+            </h2>
+            <p className="mt-2 text-xs font-medium tracking-wide text-slate/50">
+              Executive
             </p>
           </div>
 
           <div className="mt-14 space-y-8">
-            {teamMembers.map((member) => (
+            {teamMembers.filter((m) => m.position !== "대표이사").map((member) => (
               <ProfileCard key={member.name} member={member} />
             ))}
           </div>
