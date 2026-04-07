@@ -35,13 +35,13 @@ export function CoreValues() {
               핵심 가치
             </span>
             <h2 className="mt-5 font-heading text-3xl font-extrabold tracking-tight text-navy sm:text-4xl">
-              모든 디테일에 담긴 전문성
+              프로젝트 성공을 만드는 3가지 기준
             </h2>
             <p className="mt-2 text-xs font-medium tracking-wide text-slate/50">
-              Excellence in Every Detail
+              3 Principles for Reliable Structural Engineering
             </p>
             <p className="mt-3 text-slate">
-              안전을 넘어 혁신을 구조하다, 동양구조의 핵심 가치
+              발주처와 사용자가 체감하는 성과 중심으로 구조 엔지니어링을 수행합니다.
             </p>
           </div>
         </FadeIn>
