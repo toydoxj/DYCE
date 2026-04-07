@@ -23,6 +23,7 @@ const PROP = {
   UNDERGROUND_FLOORS: "지하층수",
   BUILDING_COUNT: "동수",
   ADDRESS: "주소",
+  WORK_SCOPE: "업무내용",
   STATUS: "진행단계",
   CONTRACT_DATE: "계약일",
 } as const;
@@ -61,6 +62,21 @@ function getNumber(property: PropertyValue): number | null {
 function getMultiSelect(property: PropertyValue): string[] {
   if (property.type === "multi_select") {
     return property.multi_select.map((s) => s.name);
+  }
+  return [];
+}
+
+function getRollupMultiSelect(property: PropertyValue): string[] {
+  if (property.type === "rollup" && property.rollup.type === "array") {
+    const names = new Set<string>();
+    for (const item of property.rollup.array) {
+      if (item.type === "multi_select") {
+        for (const s of item.multi_select) {
+          names.add(s.name);
+        }
+      }
+    }
+    return [...names];
   }
   return [];
 }
@@ -128,6 +144,7 @@ function pageToProject(page: PageObjectResponse, coverImage: string | null): Pro
     undergroundFloors: getNumber(p[PROP.UNDERGROUND_FLOORS]),
     buildingCount: getNumber(p[PROP.BUILDING_COUNT]),
     address: getRichText(p[PROP.ADDRESS]),
+    workScope: getRollupMultiSelect(p[PROP.WORK_SCOPE]),
     status: getSelect(p[PROP.STATUS]),
     contractDate: getDate(p[PROP.CONTRACT_DATE]),
     coverImage,

@@ -49,6 +49,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
               {u}
             </Badge>
           ))}
+          {project.workScope.map((w) => (
+            <Badge key={w} variant="secondary" className="rounded-full text-xs font-normal bg-brand/10 text-brand border-none">
+              {w}
+            </Badge>
+          ))}
         </div>
 
         <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">

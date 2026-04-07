@@ -29,6 +29,7 @@ export function ProjectTable({ projects }: ProjectTableProps) {
           <TableRow>
             <TableHead className="min-w-[200px]">용역명</TableHead>
             <TableHead>용도</TableHead>
+            <TableHead>업무내용</TableHead>
             <TableHead>구조형식</TableHead>
             <TableHead className="text-right">지상층수</TableHead>
             <TableHead className="text-right">연면적(m²)</TableHead>
@@ -47,6 +48,11 @@ export function ProjectTable({ projects }: ProjectTableProps) {
                     </Badge>
                   ))}
                 </div>
+              </TableCell>
+              <TableCell>
+                <span className="text-xs text-muted-foreground">
+                  {project.workScope.join(", ") || "-"}
+                </span>
               </TableCell>
               <TableCell>
                 <span className="text-xs text-muted-foreground">

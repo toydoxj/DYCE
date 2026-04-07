@@ -11,6 +11,7 @@ export interface Project {
   undergroundFloors: number | null;
   buildingCount: number | null;
   address: string;
+  workScope: string[];
   status: string;
   contractDate: string | null;
   coverImage: string | null;

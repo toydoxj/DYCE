@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProjectById, getProjectImages, getRelatedProjects } from "@/lib/notion";
 import {
+  Briefcase,
   Building,
   Ruler,
   Layers,
@@ -49,6 +50,11 @@ export default async function ProjectDetailPage({
 
   // 기술 데이터 항목
   const specs = [
+    {
+      icon: Briefcase,
+      label: "업무내용",
+      value: project.workScope.length > 0 ? project.workScope.join(", ") : null,
+    },
     {
       icon: Building,
       label: "규모",
@@ -106,6 +112,15 @@ export default async function ProjectDetailPage({
         )}
 
         <div className="relative w-full mx-auto max-w-7xl px-4 pb-16 pt-40 sm:px-6 lg:px-8">
+          {/* 목록으로 돌아가기 */}
+          <Link
+            href="/projects"
+            className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            수행실적 목록으로
+          </Link>
+
           {/* Breadcrumb */}
           <nav className="mb-6 flex items-center gap-1.5 text-sm text-white/30">
             <Link href="/" className="hover:text-white/60 transition-colors">
@@ -321,13 +336,13 @@ export default async function ProjectDetailPage({
       )}
 
       {/* 하단 네비게이션 */}
-      <section className="py-12">
+      <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 rounded-full bg-surface px-5 py-2.5 text-sm font-medium text-navy transition-colors hover:bg-surface-high"
+            className="inline-flex items-center gap-3 rounded-full bg-navy px-8 py-4 text-base font-semibold text-white transition-colors hover:bg-navy/80"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5" />
             수행실적 목록으로
           </Link>
         </div>
