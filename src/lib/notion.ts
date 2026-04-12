@@ -5,6 +5,11 @@ import type {
   DatabaseObjectResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 import { Project, FilterOptions } from "@/types";
+import {
+  getAllProjectsCached,
+  getFilterOptionsCached,
+  filterProjects,
+} from "./notion-cache";
 
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
@@ -163,65 +168,22 @@ function pageToProject(page: PageObjectResponse, coverImage: string | null): Pro
   };
 }
 
-// 프로젝트 목록 가져오기 (내부 구현)
-async function fetchProjects(
-  usage?: string,
-  structureType?: string,
-  status?: string,
-): Promise<Project[]> {
+// ─── Notion에서 직접 조회하는 함수 (notion-cache.ts, revalidate API에서 사용) ───
+
+// 전체 프로젝트 목록 (필터 없이 전량 조회)
+export async function fetchAllProjects(): Promise<Project[]> {
   if (!isConfigured()) return [];
 
   try {
-    const filterConditions: Array<{
-      property: string;
-      multi_select?: { contains: string };
-      select?: { equals: string };
-    }> = [];
-
-    if (usage) {
-      filterConditions.push({
-        property: PROP.USAGE,
-        multi_select: { contains: usage },
-      });
-    }
-    if (structureType) {
-      filterConditions.push({
-        property: PROP.STRUCTURE_TYPE,
-        multi_select: { contains: structureType },
-      });
-    }
-    if (status) {
-      filterConditions.push({
-        property: PROP.STATUS,
-        select: { equals: status },
-      });
-    }
-
-    const queryParams: Record<string, unknown> = {
-      database_id: DATABASE_ID,
-      page_size: 100,
-      sorts: [
-        {
-          timestamp: "created_time",
-          direction: "descending",
-        },
-      ],
-    };
-
-    if (filterConditions.length > 0) {
-      queryParams.filter =
-        filterConditions.length === 1
-          ? filterConditions[0]
-          : { and: filterConditions };
-    }
-
     const allResults: Project[] = [];
     let hasMore = true;
     let startCursor: string | undefined;
 
     while (hasMore) {
       const response = await notion.databases.query({
-        ...queryParams,
+        database_id: DATABASE_ID,
+        page_size: 100,
+        sorts: [{ timestamp: "created_time", direction: "descending" }],
         start_cursor: startCursor,
       } as Parameters<typeof notion.databases.query>[0]);
 
@@ -247,181 +209,134 @@ async function fetchProjects(
   }
 }
 
-// unstable_cache로 캐싱된 프로젝트 목록
+// 필터 옵션 추출 (DB 스키마 조회)
+export async function fetchFilterOptions(): Promise<FilterOptions> {
+  if (!isConfigured()) return { usages: [], structureTypes: [], statuses: [] };
+  try {
+    const database = await notion.databases.retrieve({
+      database_id: DATABASE_ID,
+    }) as DatabaseObjectResponse;
+
+    const properties = database.properties;
+
+    const usageProp = properties[PROP.USAGE];
+    const structureTypeProp = properties[PROP.STRUCTURE_TYPE];
+    const statusProp = properties[PROP.STATUS];
+
+    return {
+      usages:
+        usageProp?.type === "multi_select"
+          ? usageProp.multi_select.options.map((o) => o.name)
+          : [],
+      structureTypes:
+        structureTypeProp?.type === "multi_select"
+          ? structureTypeProp.multi_select.options.map((o) => o.name)
+          : [],
+      statuses:
+        statusProp?.type === "select"
+          ? statusProp.select.options.map((o) => o.name)
+          : [],
+    };
+  } catch {
+    return { usages: [], structureTypes: [], statuses: [] };
+  }
+}
+
+// Notion DB에서 lastSyncTime 이후 변경된 페이지가 있는지 확인
+export async function checkNotionUpdated(lastSyncTime: string | null): Promise<boolean> {
+  if (!isConfigured()) return false;
+
+  // 최초 동기화 (lastSyncTime 없음) → 무조건 동기화
+  if (!lastSyncTime) return true;
+
+  try {
+    const response = await notion.databases.query({
+      database_id: DATABASE_ID,
+      page_size: 1,
+      filter: {
+        timestamp: "last_edited_time",
+        last_edited_time: { after: lastSyncTime },
+      },
+    });
+
+    return response.results.length > 0;
+  } catch (error) {
+    console.error("Notion 변경 감지 실패:", error);
+    // 에러 시 안전하게 동기화 진행
+    return true;
+  }
+}
+
+// ─── 페이지/컴포넌트에서 사용하는 Public API ───
+
+// 프로젝트 목록 (KV 캐시 → in-memory 필터)
 export async function getProjects(filter?: {
   usage?: string;
   structureType?: string;
   status?: string;
 }): Promise<Project[]> {
-  const usage = filter?.usage ?? "";
-  const structureType = filter?.structureType ?? "";
-  const status = filter?.status ?? "";
-
-  const cached = unstable_cache(
-    () => fetchProjects(usage, structureType, status),
-    ["projects", usage, structureType, status],
-    { tags: ["projects"], revalidate: 3600 },
-  );
-
-  return cached();
+  const allProjects = await getAllProjectsCached();
+  return filterProjects(allProjects, filter);
 }
 
-// 단일 프로젝트 조회 (내부 구현)
-async function fetchProjectById(id: string): Promise<Project | null> {
-  if (!isConfigured()) return null;
-
-  try {
-    const page = await notion.pages.retrieve({ page_id: id });
-    if (!("properties" in page)) return null;
-
-    const typedPage = page as PageObjectResponse;
-    const cover = getCoverImage(typedPage);
-    const image = cover ?? (await getFirstImage(typedPage.id));
-    return pageToProject(typedPage, image);
-  } catch (error) {
-    console.error("Notion API 프로젝트 상세 조회 실패:", error);
-    return null;
-  }
-}
-
-// 캐싱된 단일 프로젝트 조회
+// 단일 프로젝트 조회 (KV 캐시에서 find)
 export async function getProjectById(id: string): Promise<Project | null> {
-  const cached = unstable_cache(
-    () => fetchProjectById(id),
-    ["project", id],
-    { tags: ["projects", `project-${id}`], revalidate: 3600 },
-  );
-
-  return cached();
+  const allProjects = await getAllProjectsCached();
+  return allProjects.find((p) => p.id === id) ?? null;
 }
 
-// 페이지 본문의 모든 이미지 URL 추출 (내부 구현)
-async function fetchProjectImages(pageId: string): Promise<string[]> {
-  if (!isConfigured()) return [];
-
-  try {
-    const images: string[] = [];
-    let cursor: string | undefined;
-    let hasMore = true;
-
-    while (hasMore) {
-      const response = await notion.blocks.children.list({
-        block_id: pageId,
-        page_size: 100,
-        start_cursor: cursor,
-      });
-
-      for (const block of response.results) {
-        if ("type" in block && block.type === "image") {
-          const image = block.image;
-          if (image.type === "file") images.push(image.file.url);
-          else if (image.type === "external") images.push(image.external.url);
-        }
-      }
-
-      hasMore = response.has_more;
-      cursor = response.next_cursor ?? undefined;
-    }
-
-    return images;
-  } catch {
-    return [];
-  }
-}
-
-// 캐싱된 프로젝트 이미지 조회
-export async function getProjectImages(pageId: string): Promise<string[]> {
-  const cached = unstable_cache(
-    () => fetchProjectImages(pageId),
-    ["project-images", pageId],
-    { tags: [`project-${pageId}`], revalidate: 3600 },
-  );
-
-  return cached();
-}
-
-// 같은 용도의 관련 프로젝트 조회 (최대 4개, 내부 구현)
-async function fetchRelatedProjects(
-  currentId: string,
-  firstUsage: string,
-): Promise<Project[]> {
-  if (!isConfigured()) return [];
-
-  try {
-    const response = await notion.databases.query({
-      database_id: DATABASE_ID,
-      page_size: 5,
-      filter: {
-        property: PROP.USAGE,
-        multi_select: { contains: firstUsage },
-      },
-      sorts: [{ timestamp: "created_time", direction: "descending" }],
-    });
-
-    const pages = response.results.filter(
-      (page): page is PageObjectResponse =>
-        "properties" in page && page.id !== currentId,
-    );
-
-    // 관련 프로젝트도 커버 이미지만 사용 (N+1 제거)
-    return pages.slice(0, 4).map((page) => {
-      const cover = getCoverImage(page);
-      return pageToProject(page, cover);
-    });
-  } catch {
-    return [];
-  }
-}
-
-// 캐싱된 관련 프로젝트 조회
+// 관련 프로젝트 조회 (KV 캐시에서 filter)
 export async function getRelatedProjects(
   currentId: string,
   usages: string[],
 ): Promise<Project[]> {
   if (usages.length === 0) return [];
 
-  const cached = unstable_cache(
-    () => fetchRelatedProjects(currentId, usages[0]),
-    ["related-projects", currentId, usages[0]],
-    { tags: ["projects"], revalidate: 3600 },
-  );
-
-  return cached();
+  const allProjects = await getAllProjectsCached();
+  return allProjects
+    .filter((p) => p.id !== currentId && p.usage.some((u) => usages.includes(u)))
+    .slice(0, 4);
 }
 
-// 필터 옵션 추출 (DB 스키마는 자주 변경되지 않으므로 더 긴 캐시)
-export const getFilterOptions = unstable_cache(
-  async (): Promise<FilterOptions> => {
-    if (!isConfigured()) return { usages: [], structureTypes: [], statuses: [] };
+// 필터 옵션 (KV 캐시)
+export async function getFilterOptions(): Promise<FilterOptions> {
+  return getFilterOptionsCached();
+}
+
+// 프로젝트 이미지 (상세 페이지 전용, 건당 1회만 호출되므로 unstable_cache 유지)
+export const getProjectImages = unstable_cache(
+  async (pageId: string): Promise<string[]> => {
+    if (!isConfigured()) return [];
+
     try {
-      const database = await notion.databases.retrieve({
-        database_id: DATABASE_ID,
-      }) as DatabaseObjectResponse;
+      const images: string[] = [];
+      let cursor: string | undefined;
+      let hasMore = true;
 
-      const properties = database.properties;
+      while (hasMore) {
+        const response = await notion.blocks.children.list({
+          block_id: pageId,
+          page_size: 100,
+          start_cursor: cursor,
+        });
 
-      const usageProp = properties[PROP.USAGE];
-      const structureTypeProp = properties[PROP.STRUCTURE_TYPE];
-      const statusProp = properties[PROP.STATUS];
+        for (const block of response.results) {
+          if ("type" in block && block.type === "image") {
+            const image = block.image;
+            if (image.type === "file") images.push(image.file.url);
+            else if (image.type === "external") images.push(image.external.url);
+          }
+        }
 
-      return {
-        usages:
-          usageProp?.type === "multi_select"
-            ? usageProp.multi_select.options.map((o) => o.name)
-            : [],
-        structureTypes:
-          structureTypeProp?.type === "multi_select"
-            ? structureTypeProp.multi_select.options.map((o) => o.name)
-            : [],
-        statuses:
-          statusProp?.type === "select"
-            ? statusProp.select.options.map((o) => o.name)
-            : [],
-      };
+        hasMore = response.has_more;
+        cursor = response.next_cursor ?? undefined;
+      }
+
+      return images;
     } catch {
-      return { usages: [], structureTypes: [], statuses: [] };
+      return [];
     }
   },
-  ["filter-options"],
-  { tags: ["filter-options"], revalidate: 86400 },
+  ["project-images"],
+  { revalidate: 3600 },
 );
