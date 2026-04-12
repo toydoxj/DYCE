@@ -15,8 +15,8 @@ export const CACHE_TTL = {
 
 // Upstash Redis 환경변수가 설정된 경우에만 인스턴스 생성
 function createRedisClient(): Redis | null {
-  const url = process.env.KV_REST_API_URL;
-  const token = process.env.KV_REST_API_TOKEN;
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!url || !token) return null;
 
