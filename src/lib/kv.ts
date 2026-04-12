@@ -13,28 +13,34 @@ export const CACHE_TTL = {
   FILTER_OPTIONS: 60 * 60 * 24 * 7, // 7일
 } as const;
 
-// Upstash Redis 환경변수가 설정된 경우에만 인스턴스 생성
-function createRedisClient(): Redis | null {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+// Lazy 초기화 (빌드 시 환경변수 부재로 인한 에러 방지)
+let redis: Redis | null = null;
+let redisChecked = false;
+
+function getRedis(): Redis | null {
+  if (redisChecked) return redis;
+  redisChecked = true;
+
+  const url = process.env.UPSTASH_REDIS_REST_URL?.trim();
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
 
   if (!url || !token) return null;
 
-  return new Redis({ url, token });
+  redis = new Redis({ url, token });
+  return redis;
 }
-
-const redis = createRedisClient();
 
 // KV 사용 가능 여부
 export function isKvConfigured(): boolean {
-  return redis !== null;
+  return getRedis() !== null;
 }
 
 // KV에서 값 조회 (미설정 시 null)
 export async function kvGet<T>(key: string): Promise<T | null> {
-  if (!redis) return null;
+  const client = getRedis();
+  if (!client) return null;
   try {
-    return await redis.get<T>(key);
+    return await client.get<T>(key);
   } catch (error) {
     console.error(`KV GET 실패 [${key}]:`, error);
     return null;
@@ -43,12 +49,13 @@ export async function kvGet<T>(key: string): Promise<T | null> {
 
 // KV에 값 저장 (미설정 시 무시)
 export async function kvSet<T>(key: string, value: T, ttlSeconds?: number): Promise<void> {
-  if (!redis) return;
+  const client = getRedis();
+  if (!client) return;
   try {
     if (ttlSeconds) {
-      await redis.set(key, value, { ex: ttlSeconds });
+      await client.set(key, value, { ex: ttlSeconds });
     } else {
-      await redis.set(key, value);
+      await client.set(key, value);
     }
   } catch (error) {
     console.error(`KV SET 실패 [${key}]:`, error);
