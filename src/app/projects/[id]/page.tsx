@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProjectById, getProjectImages, getRelatedProjects } from "@/lib/notion";
+import { getProjectById, getProjectImageBlockIds, getRelatedProjects } from "@/lib/notion";
 import {
   Briefcase,
   Building,
@@ -39,10 +39,15 @@ export default async function ProjectDetailPage({
 }: ProjectDetailPageProps) {
   const { id } = await params;
 
-  const [project, images] = await Promise.all([
+  const [project, imageBlockIds] = await Promise.all([
     getProjectById(id),
-    getProjectImages(id),
+    getProjectImageBlockIds(id),
   ]);
+
+  // 블록 ID를 프록시 URL로 변환 (Notion 임시 URL 만료 방지)
+  const images = imageBlockIds.map(
+    (blockId) => `/api/notion-image/block/${blockId}`,
+  );
 
   if (!project) notFound();
 

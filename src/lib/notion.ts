@@ -112,41 +112,15 @@ function getDate(property: PropertyValue | undefined): string | null {
   return null;
 }
 
-// 페이지 본문에서 첫 번째 이미지 URL 추출
-async function getFirstImage(pageId: string): Promise<string | null> {
-  try {
-    const response = await notion.blocks.children.list({
-      block_id: pageId,
-      page_size: 20,
-    });
-
-    for (const block of response.results) {
-      if ("type" in block && block.type === "image") {
-        const image = block.image;
-        if (image.type === "file") {
-          return image.file.url;
-        }
-        if (image.type === "external") {
-          return image.external.url;
-        }
-      }
-    }
-  } catch {
-    // 블록 조회 실패 시 무시
-  }
-  return null;
-}
-
-// 페이지 커버 이미지 URL 추출
-function getCoverImage(page: PageObjectResponse): string | null {
-  if (!page.cover) return null;
-  if (page.cover.type === "file") return page.cover.file.url;
-  if (page.cover.type === "external") return page.cover.external.url;
-  return null;
+// 페이지에 커버 이미지가 있는지 확인
+function hasCoverImage(page: PageObjectResponse): boolean {
+  return page.cover !== null;
 }
 
 // Notion 페이지를 Project 타입으로 변환
-function pageToProject(page: PageObjectResponse, coverImage: string | null): Project {
+// coverImage에는 프록시 URL을 저장 (Notion 임시 URL 만료 방지)
+function pageToProject(page: PageObjectResponse, hasCover: boolean): Project {
+  const coverImage = hasCover ? `/api/notion-image/cover/${page.id}` : null;
   const p = page.properties;
 
   return {
@@ -191,10 +165,9 @@ export async function fetchAllProjects(): Promise<Project[]> {
         (page): page is PageObjectResponse => "properties" in page
       );
 
-      // 목록 조회에서는 커버 이미지만 사용 (N+1 getFirstImage 호출 제거)
+      // 커버 유무만 확인하고 프록시 URL 생성 (Notion 임시 URL 캐싱 방지)
       const projects = pages.map((page) => {
-        const cover = getCoverImage(page);
-        return pageToProject(page, cover);
+        return pageToProject(page, hasCoverImage(page));
       });
       allResults.push(...projects);
 
@@ -303,13 +276,14 @@ export async function getFilterOptions(): Promise<FilterOptions> {
   return getFilterOptionsCached();
 }
 
-// 프로젝트 이미지 (상세 페이지 전용, 건당 1회만 호출되므로 unstable_cache 유지)
-export const getProjectImages = unstable_cache(
+// 프로젝트 이미지 블록 ID 목록 (상세 페이지 전용)
+// URL이 아닌 블록 ID를 캐싱하여 Notion 임시 URL 만료 문제 방지
+export const getProjectImageBlockIds = unstable_cache(
   async (pageId: string): Promise<string[]> => {
     if (!isConfigured()) return [];
 
     try {
-      const images: string[] = [];
+      const blockIds: string[] = [];
       let cursor: string | undefined;
       let hasMore = true;
 
@@ -322,9 +296,7 @@ export const getProjectImages = unstable_cache(
 
         for (const block of response.results) {
           if ("type" in block && block.type === "image") {
-            const image = block.image;
-            if (image.type === "file") images.push(image.file.url);
-            else if (image.type === "external") images.push(image.external.url);
+            blockIds.push(block.id);
           }
         }
 
@@ -332,11 +304,11 @@ export const getProjectImages = unstable_cache(
         cursor = response.next_cursor ?? undefined;
       }
 
-      return images;
+      return blockIds;
     } catch {
       return [];
     }
   },
-  ["project-images"],
+  ["project-image-blocks"],
   { revalidate: 3600 },
 );
