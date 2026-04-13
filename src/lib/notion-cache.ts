@@ -84,17 +84,20 @@ export function filterProjects(
 }
 
 // Notion 변경 감지 후 동기화 (Cron + 백그라운드에서 호출)
-export async function syncIfChanged(): Promise<{ synced: boolean; count: number }> {
-  const lastSync = await kvGet<string>(CACHE_KEYS.LAST_SYNC);
-  const hasChanges = await checkNotionUpdated(lastSync);
+// force=true: 변경 여부와 관계없이 강제 재동기화
+export async function syncIfChanged(force = false): Promise<{ synced: boolean; count: number }> {
+  if (!force) {
+    const lastSync = await kvGet<string>(CACHE_KEYS.LAST_SYNC);
+    const hasChanges = await checkNotionUpdated(lastSync);
 
-  if (!hasChanges) {
-    // 변경 없어도 lastSync 갱신 (stale 판단 리셋)
-    await kvSet(CACHE_KEYS.LAST_SYNC, new Date().toISOString());
-    return { synced: false, count: 0 };
+    if (!hasChanges) {
+      // 변경 없어도 lastSync 갱신 (stale 판단 리셋)
+      await kvSet(CACHE_KEYS.LAST_SYNC, new Date().toISOString());
+      return { synced: false, count: 0 };
+    }
   }
 
-  // 변경 감지됨 → 전량 재동기화
+  // 전량 재동기화
   const [projects, filterOptions] = await Promise.all([
     fetchAllProjects(),
     fetchFilterOptions(),

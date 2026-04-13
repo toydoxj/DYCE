@@ -14,7 +14,8 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const result = await syncIfChanged();
+    const force = req.nextUrl.searchParams.get("force") === "true";
+    const result = await syncIfChanged(force);
 
     return NextResponse.json({
       ok: true,
