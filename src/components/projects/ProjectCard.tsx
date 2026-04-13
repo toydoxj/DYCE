@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Project } from "@/types";
 import { Building, Ruler, Layers } from "lucide-react";
@@ -9,9 +12,11 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <Link href={`/projects/${project.id}`} className="group overflow-hidden rounded-2xl bg-white transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 block">
-      {project.coverImage && (
+      {project.coverImage && !imgError && (
         <div className="relative h-52 w-full overflow-hidden bg-surface">
           <Image
             src={project.coverImage}
@@ -19,6 +24,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            onError={() => setImgError(true)}
           />
         </div>
       )}

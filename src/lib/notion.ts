@@ -112,15 +112,10 @@ function getDate(property: PropertyValue | undefined): string | null {
   return null;
 }
 
-// 페이지에 커버 이미지가 있는지 확인
-function hasCoverImage(page: PageObjectResponse): boolean {
-  return page.cover !== null;
-}
-
 // Notion 페이지를 Project 타입으로 변환
-// coverImage에는 프록시 URL을 저장 (Notion 임시 URL 만료 방지)
-function pageToProject(page: PageObjectResponse, hasCover: boolean): Project {
-  const coverImage = hasCover ? `/api/notion-image/cover/${page.id}` : null;
+// coverImage에 프록시 URL 저장 (프록시가 커버 → 본문 이미지 순으로 탐색)
+function pageToProject(page: PageObjectResponse): Project {
+  const coverImage = `/api/notion-image/cover/${page.id}`;
   const p = page.properties;
 
   return {
@@ -165,10 +160,8 @@ export async function fetchAllProjects(): Promise<Project[]> {
         (page): page is PageObjectResponse => "properties" in page
       );
 
-      // 커버 유무만 확인하고 프록시 URL 생성 (Notion 임시 URL 캐싱 방지)
-      const projects = pages.map((page) => {
-        return pageToProject(page, hasCoverImage(page));
-      });
+      // 프록시 URL 생성 (Notion 임시 URL 캐싱 방지)
+      const projects = pages.map((page) => pageToProject(page));
       allResults.push(...projects);
 
       hasMore = response.has_more;
