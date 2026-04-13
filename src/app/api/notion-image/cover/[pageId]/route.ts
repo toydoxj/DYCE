@@ -52,7 +52,8 @@ export async function GET(
         "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=3600",
       },
     });
-  } catch {
+  } catch (error) {
+    console.error(`[notion-image/cover] pageId=${pageId}`, error);
     return new NextResponse(null, { status: 404 });
   }
 }
