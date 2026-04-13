@@ -53,11 +53,7 @@ export async function GET(
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "unknown";
     console.error(`[notion-image/cover] pageId=${pageId}`, error);
-    return NextResponse.json(
-      { error: message, hasKey: !!process.env.NOTION_API_KEY },
-      { status: 500 },
-    );
+    return new NextResponse(null, { status: 404 });
   }
 }
