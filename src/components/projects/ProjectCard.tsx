@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Project } from "@/types";
-import { Building, Ruler, Layers } from "lucide-react";
+import { Building2, Building, Ruler, Layers } from "lucide-react";
 
 interface ProjectCardProps {
   project: Project;
@@ -13,21 +13,26 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const [imgError, setImgError] = useState(false);
+  const hasImage = project.coverImage && !imgError;
 
   return (
     <Link href={`/projects/${project.id}`} className="group overflow-hidden rounded-2xl bg-white transition-all duration-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 block">
-      {project.coverImage && !imgError && (
-        <div className="relative h-52 w-full overflow-hidden bg-surface">
+      <div className="relative h-52 w-full overflow-hidden bg-surface-low">
+        {hasImage ? (
           <Image
-            src={project.coverImage}
+            src={project.coverImage!}
             alt={project.projectName}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             onError={() => setImgError(true)}
           />
-        </div>
-      )}
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <Building2 className="h-10 w-10 text-slate/20" />
+          </div>
+        )}
+      </div>
       <div className="p-5">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-heading font-bold text-navy line-clamp-2">
