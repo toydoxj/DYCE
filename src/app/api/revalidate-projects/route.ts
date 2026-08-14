@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isKvConfigured } from "@/lib/kv";
-import { syncIfChanged } from "@/lib/notion-cache";
+import { syncProjects } from "@/lib/notion-cache";
 
 export async function GET(req: NextRequest) {
   // CRON_SECRET 인증 (Vercel Cron은 Authorization 헤더로 전달)
@@ -14,8 +14,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const force = req.nextUrl.searchParams.get("force") === "true";
-    const result = await syncIfChanged(force);
+    const result = await syncProjects();
 
     return NextResponse.json({
       ok: true,

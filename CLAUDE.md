@@ -41,7 +41,9 @@ src/
 │       sheet, table, tabs, textarea, tooltip, FadeIn
 ├── data/                       # 정적 데이터 (business, company, navigation, team)
 ├── hooks/                      # useFadeIn
-├── lib/                        # utils(cn), constants(COMPANY), notion(API), schemas/contact(zod)
+├── lib/                        # utils(cn), constants(COMPANY), dy-task(수행실적 API),
+│                               # notion(폴백), notion-cache(KV), notion-image(프록시),
+│                               # kv(Upstash), schemas/contact(zod)
 └── types/                      # TypeScript 인터페이스
 ```
 
@@ -49,7 +51,19 @@ src/
 
 **데이터 소스 이원화**:
 - `src/data/` — 회사소개, 연혁, 사업분야, 팀원 등 정적 데이터 (TypeScript 파일)
-- `src/lib/notion.ts` — 수행실적은 Notion DB에서 ISR(1시간)로 조회. API 미설정 시 빈 배열 반환
+- 수행실적 — dy-task(사내 업무관리) 공개 API가 주 소스
+
+**수행실적 데이터 흐름**: Notion 마스터 DB가 원본이지만 직접 조회하지 않는다.
+```
+Notion 마스터 DB → (dy-task sync, 1시간) → mirror_master_projects
+  → GET api.dyce.kr/api/public/projects → Upstash KV(24h TTL, 30분 SWR) → 페이지
+```
+- `src/lib/dy-task.ts` — 주 소스. mirror를 읽으므로 Notion rate limit(3 req/s)과 전량 페이지네이션에서 자유롭고, 마스터 DB에 없는 **진행단계·계약일을 하위 프로젝트에서 유도**해 받는다
+- `src/lib/notion.ts` — dy-task 장애 시 폴백 경로 (Notion 직결)
+- `src/lib/notion-cache.ts` — KV 캐시 계층. `syncProjects()`를 Vercel cron(매일 02:00)과 SWR 백그라운드가 호출
+- 이미지는 여전히 Notion이 원본. `/api/notion-image/{cover|block}/...`가 바이너리를 스트리밍하고 CDN이 캐싱한다(302 redirect를 쓰면 Notion signed URL 1시간 만료로 캐시가 무의미). API가 `image_kind`로 이미지 부재를 알려주면 프록시 호출 자체를 생략
+
+**주의**: 마스터 DB는 대부분의 속성이 비어 있다 (331건 중 용도 35, 구조형식 25, 연면적 21, MASTER_CODE 101). 필터·카드에 값이 안 보이는 것은 코드 문제가 아니라 원본 입력 상태다.
 
 **문의하기**: `src/app/contact/action.ts` Server Action + nodemailer SMTP 전송 (수신: dyce@dyce.kr)
 
@@ -70,8 +84,10 @@ src/
 ## 환경변수
 
 ```
-NOTION_API_KEY=       # Notion Integration 토큰
-NOTION_DATABASE_ID=   # 수행실적 데이터베이스 ID
+DY_TASK_API_URL=      # dy-task backend (기본 https://api.dyce.kr)
+DY_TASK_PUBLIC_KEY=   # dy-task PUBLIC_API_KEY와 동일 값 (미설정 시 검증 생략)
+NOTION_API_KEY=       # Notion Integration 토큰 (이미지 프록시 + 폴백)
+NOTION_DATABASE_ID=   # 수행실적 데이터베이스 ID (폴백 전용)
 SMTP_HOST=            # 메일 서버 (smtp.worksmobile.com)
 SMTP_PORT=            # 587
 SMTP_USER=            # 발신 이메일

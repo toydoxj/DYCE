@@ -137,7 +137,10 @@ function pageToProject(page: PageObjectResponse): Project {
   };
 }
 
-// ─── Notion에서 직접 조회하는 함수 (notion-cache.ts, revalidate API에서 사용) ───
+// ─── Notion 직결 조회 (dy-task 공개 API 장애 시 폴백 경로) ───
+//
+// 수행실적의 주 소스는 dy-task mirror(lib/dy-task.ts)다. 여기 함수들은
+// 그쪽이 실패했을 때만 notion-cache.ts가 호출한다.
 
 // 전체 프로젝트 목록 (필터 없이 전량 조회)
 export async function fetchAllProjects(): Promise<Project[]> {
@@ -205,31 +208,6 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
     };
   } catch {
     return { usages: [], structureTypes: [], statuses: [] };
-  }
-}
-
-// Notion DB에서 lastSyncTime 이후 변경된 페이지가 있는지 확인
-export async function checkNotionUpdated(lastSyncTime: string | null): Promise<boolean> {
-  if (!isConfigured()) return false;
-
-  // 최초 동기화 (lastSyncTime 없음) → 무조건 동기화
-  if (!lastSyncTime) return true;
-
-  try {
-    const response = await notion.databases.query({
-      database_id: DATABASE_ID,
-      page_size: 1,
-      filter: {
-        timestamp: "last_edited_time",
-        last_edited_time: { after: lastSyncTime },
-      },
-    });
-
-    return response.results.length > 0;
-  } catch (error) {
-    console.error("Notion 변경 감지 실패:", error);
-    // 에러 시 안전하게 동기화 진행
-    return true;
   }
 }
 

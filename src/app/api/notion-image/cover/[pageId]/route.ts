@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { Client } from "@notionhq/client";
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { streamNotionImage, imageMissResponse } from "@/lib/notion-image";
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
@@ -21,8 +22,8 @@ async function getFirstBlockImage(pageId: string): Promise<string | null> {
   return null;
 }
 
-// 이미지 프록시: 커버 → 본문 첫 이미지 순으로 탐색
-// /api/notion-image/cover/[pageId] → 302 redirect to fresh Notion URL
+// 이미지 프록시: 커버 → 본문 첫 이미지 순으로 탐색 후 바이너리 스트리밍
+// /api/notion-image/cover/[pageId]
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ pageId: string }> },
@@ -43,17 +44,12 @@ export async function GET(
     }
 
     if (!url) {
-      return new NextResponse(null, { status: 404 });
+      return imageMissResponse();
     }
 
-    return NextResponse.redirect(url, {
-      status: 302,
-      headers: {
-        "Cache-Control": "public, s-maxage=1800, stale-while-revalidate=3600",
-      },
-    });
+    return streamNotionImage(url);
   } catch (error) {
     console.error(`[notion-image/cover] pageId=${pageId}`, error);
-    return new NextResponse(null, { status: 404 });
+    return imageMissResponse();
   }
 }
