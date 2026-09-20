@@ -2,7 +2,9 @@ import { Redis } from "@upstash/redis";
 
 // KV 캐시 키 상수
 export const CACHE_KEYS = {
-  ALL_PROJECTS: "projects:all",
+  // Project 스키마가 바뀌면 키 버전을 올린다. 구 키는 TTL로 자연 소멸하므로
+  // 수동 무효화 없이 새 스키마로 갈아탈 수 있다. v2: description 필드 추가
+  ALL_PROJECTS: "projects:all:v2",
   FILTER_OPTIONS: "projects:filter-options",
   LAST_SYNC: "projects:last-sync",
 } as const;

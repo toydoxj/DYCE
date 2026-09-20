@@ -31,6 +31,7 @@ interface DyTaskProject {
   underground_floors: number | null;
   building_count: number | null;
   address: string;
+  description: string;
   work_scope: string[];
   status: string;
   contract_date: string | null;
@@ -101,6 +102,8 @@ function toProject(item: DyTaskProject): Project {
     undergroundFloors: item.underground_floors,
     buildingCount: item.building_count,
     address: item.address,
+    // backend 배포 시차 동안 필드가 없을 수 있다 (구 캐시·구 응답)
+    description: item.description ?? "",
     workScope: item.work_scope,
     status: item.status,
     contractDate: item.contract_date,

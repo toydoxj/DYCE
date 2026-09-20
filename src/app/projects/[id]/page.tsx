@@ -99,6 +99,9 @@ export default async function ProjectDetailPage({
     },
   ].filter((s) => s.value !== null);
 
+  // 공백만 있는 값도 없는 것으로 본다 (마스터 DB 대부분이 빈 값)
+  const description = project.description?.trim() ?? "";
+
   return (
     <>
       {/* Hero */}
@@ -229,6 +232,33 @@ export default async function ProjectDetailPage({
                 </div>
               </div>
             )}
+          </div>
+        </section>
+      )}
+
+      {/* 프로젝트 개요 */}
+      {description && (
+        <section className="py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3 mb-10">
+              <span className="inline-flex items-center rounded-full bg-brand/10 px-3.5 py-1 text-xs font-semibold text-brand">
+                개요
+              </span>
+              <div>
+                <h2 className="font-heading text-2xl font-extrabold tracking-tight text-navy">
+                  프로젝트 개요
+                </h2>
+                <p className="mt-0.5 text-xs font-medium tracking-wide text-slate/50">
+                  Overview
+                </p>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-surface p-8 sm:p-10">
+              <p className="max-w-3xl whitespace-pre-line text-base leading-relaxed text-slate">
+                {description}
+              </p>
+            </div>
           </div>
         </section>
       )}
